@@ -10,11 +10,7 @@ import app.framework.PercentageStrategy;
 
 public class SilverMonthlyInterestPercentageStrategy implements PercentageStrategy {
 
-    private double percent;
-
-    public SilverMonthlyInterestPercentageStrategy(double percent) {
-        this.percent = percent;
-    }
+    private double percent = 0.08;
 
     public double getPercent() {
         return percent;

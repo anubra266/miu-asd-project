@@ -10,11 +10,8 @@ import app.framework.PercentageStrategy;
 
 public class BronzeMinimumInterestPercentageStrategy implements PercentageStrategy {
 
-    private double percent;
+    private double percent = .14;
 
-    public BronzeMinimumInterestPercentageStrategy(double percent) {
-        this.percent = percent;
-    }
 
     public double getPercent() {
         return percent;

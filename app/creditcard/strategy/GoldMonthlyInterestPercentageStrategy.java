@@ -4,7 +4,7 @@ import app.framework.PercentageStrategy;
 
 public class GoldMonthlyInterestPercentageStrategy implements PercentageStrategy {
 
-    private double percent;
+    private double percent = .06;
 
     public GoldMonthlyInterestPercentageStrategy(double percent) {
         this.percent = percent;

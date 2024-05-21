@@ -10,11 +10,7 @@ import app.framework.PercentageStrategy;
 
 public class SavingPercentageStrategy implements PercentageStrategy {
 
-    private double percent;
-
-    public SavingPercentageStrategy(double percent) {
-        this.percent = percent;
-    }
+    private double percent = .1;
 
     public double getPercent() {
         return percent;
