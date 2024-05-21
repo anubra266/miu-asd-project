@@ -8,11 +8,11 @@ package app.banking.strategy;
 
 import app.framework.PercentageStrategy;
 
-public class SavingPercentageStrategy implements PercentageStrategy {
+public class CheckingPercentageStrategy implements PercentageStrategy {
 
     private double percent;
 
-    public SavingPercentageStrategy(double percent) {
+    public CheckingPercentageStrategy(double percent) {
         this.percent = percent;
     }
 
