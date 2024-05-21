@@ -8,9 +8,9 @@ package app.banking.strategy;
 
 import app.framework.PercentageStrategy;
 
-public class SavingPercentageStrategy implements PercentageStrategy {
+public class CheckingPercentageStrategy implements PercentageStrategy {
 
-    private double percent = .1;
+    private double percent = .01;
 
     public double getPercent() {
         return percent;

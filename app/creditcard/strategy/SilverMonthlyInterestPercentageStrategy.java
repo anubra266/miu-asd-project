@@ -1,16 +1,16 @@
 /**
  * Author: Bayarjargal Jargalsaikhan
  * Date:2024.05.21
- * Time:11:31
+ * Time:11:33
  */
 
-package app.banking.strategy;
+package app.creditcard.strategy;
 
 import app.framework.PercentageStrategy;
 
-public class SavingPercentageStrategy implements PercentageStrategy {
+public class SilverMonthlyInterestPercentageStrategy implements PercentageStrategy {
 
-    private double percent = .1;
+    private double percent = 0.08;
 
     public double getPercent() {
         return percent;
