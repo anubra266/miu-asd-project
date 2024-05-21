@@ -1,7 +1,7 @@
 package app.framework;
 
 public interface Observable {
-    void register();
-    void unregister();
+    void register(Observer ob);
+    void unregister(Observer ob);
     void alert();
 }
