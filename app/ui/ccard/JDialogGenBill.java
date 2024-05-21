@@ -1,11 +1,10 @@
-package ui.ccard;
+package app.ui.ccard;
 
 /*
 		A basic implementation of the JDialog class.
 */
 
 import java.awt.*;
-import javax.swing.*;
 
 public class JDialogGenBill extends javax.swing.JDialog {
 	String billstring;

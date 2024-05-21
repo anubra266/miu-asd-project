@@ -1,4 +1,4 @@
-package ui.ccard;
+package app.ui.ccard;
 
 /*
 		A basic implementation of the JDialog class.
