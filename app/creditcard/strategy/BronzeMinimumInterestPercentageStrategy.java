@@ -26,6 +26,6 @@ public class BronzeMinimumInterestPercentageStrategy implements PercentageStrate
 
     @Override
     public double getPercentAmount(double amount) {
-        return 0;
+        return amount * percent;
     }
 }
