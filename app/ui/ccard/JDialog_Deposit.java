@@ -1,7 +1,4 @@
-package ui.ccard;
-
-import java.awt.*;
-import javax.swing.*;
+package app.ui.ccard;
 
 public class JDialog_Deposit extends javax.swing.JDialog {
 
