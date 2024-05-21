@@ -1,6 +1,5 @@
 package app.banking.observers;
 
-import app.creditcard.observers.CreditCardEmailSender;
 import app.framework.Observable;
 import app.framework.Observer;
 
