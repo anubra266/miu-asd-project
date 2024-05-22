@@ -10,6 +10,8 @@ public  class  Account {
     public double balance;
 
     private List<AccountEntry> entryList = new ArrayList<AccountEntry>();
+    private PercentageStrategy percentageStrategy;
+
 
 
     public String getAccountNumber() {
@@ -31,7 +33,10 @@ public  class  Account {
     private void addEntry(AccountEntry entry) {
         entryList.add(entry);
     }
-    
+
+
+
+
     public void deposit(double amount) {
         AccountEntry entry = new AccountEntry(amount, "deposit", "", "");
         entryList.add(entry);
@@ -39,6 +44,14 @@ public  class  Account {
 
     public void withdraw(double amount) {
         AccountEntry entry = new AccountEntry(-amount, "withdraw", "", "");
+        entryList.add(entry);
+    }
+
+    //Strategy Pattern
+
+    public void addInterest() {
+        double interest = this.percentageStrategy.getPercentAmount(getBalance());
+        AccountEntry entry = new AccountEntry(interest, "added interest", "", "");
         entryList.add(entry);
     }
 }
