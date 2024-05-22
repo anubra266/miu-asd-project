@@ -217,8 +217,6 @@ public class BankFrm extends javax.swing.JFrame
             newaccount=false;
         }
 
-       
-        
     }
 
 	void JButtonCompAC_actionPerformed(java.awt.event.ActionEvent event)

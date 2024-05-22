@@ -1,6 +1,8 @@
 package app.creditcard;
 
+import app.creditcard.strategies.*;
 import app.framework.domain.*;
+import app.framework.exceptions.AccountCreationException;
 
 import java.time.LocalDate;
 import java.util.Collection;;
@@ -20,15 +22,44 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     @Override
     public void createAccount(String name, String street, String city, String state, String zip, String email,
-            String ccNumber, LocalDate exprDate) {
-        if (!this.creditCardDatabase.isUnique(ccNumber)) {
-            throw new IllegalArgumentException("Credit card number already exists");
+            String ccNumber, LocalDate exprDate, CreditCardType type) throws AccountCreationException {
+
+        if (creditCardDatabase.isUnique(ccNumber)) {
+            Address address = new Address(street, city, state, zip);
+            Customer customer = new Customer(name, email, address);
+            CreditAccount account = new CreditAccount(ccNumber, customer, exprDate);
+
+            PercentageStrategy percentageStrategy;
+            PercentageStrategy minimumPaymentStrategy;
+            switch (type){
+                case GOLD:
+                    percentageStrategy = new GoldMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new GoldMinimumPaymentPercentageStrategy();
+                    break;
+                case SILVER:
+                    percentageStrategy = new SilverMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new SilverMinimumPaymentPercentageStrategy();
+                    break;
+                case BRONZE:
+                    percentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new BronzeMinimumInterestPercentageStrategy();
+                    break;
+                default:
+                    throw new AccountCreationException("Invalid Credit card type "+ type);
+
+            }
+            account.setPercentageStrategy(percentageStrategy);
+            account.setMinimumPaymentStrategy(minimumPaymentStrategy);
+
+            this.creditCardDatabase.save(ccNumber, account);
+            return;
         }
-        Address address = new Address(street, city, state, zip);
-        Customer customer = new Customer(name, email, address);
-        CreditAccount account = new CreditAccount(ccNumber, customer);
-        this.creditCardDatabase.save(ccNumber, account);
+
+        throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
+
+
     }
+
 
     @Override
     public void generateMonthlyBill() {
@@ -65,6 +96,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         this.creditCardDatabase.save(ccNumber, account);
         this.alert(Event.DEPOSIT, account);
     }
+
 
     @Override
     public void alert(Event event, Object obj) {

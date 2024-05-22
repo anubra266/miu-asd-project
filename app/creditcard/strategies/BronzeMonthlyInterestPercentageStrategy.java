@@ -13,8 +13,7 @@ public class BronzeMonthlyInterestPercentageStrategy implements PercentageStrate
 
     private double percent = .1;
 
-    public BronzeMonthlyInterestPercentageStrategy(double percent) {
-        this.percent = percent;
+    public BronzeMonthlyInterestPercentageStrategy() {
     }
 
     public double getPercent() {
