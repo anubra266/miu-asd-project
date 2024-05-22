@@ -4,7 +4,7 @@
  * Time:14:35
  */
 
-package app.framework;
+package app.framework.rules;
 
 public interface Rule<E, T>{
 

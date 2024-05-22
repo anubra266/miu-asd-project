@@ -6,7 +6,10 @@
 
 package app.banking.rules;
 
-import app.framework.*;
+import app.framework.domain.Account;
+import app.framework.domain.Entry;
+import app.framework.domain.Event;
+import app.framework.domain.Observable;
 import app.framework.exceptions.FraudTransactionException;
 
 import java.time.Duration;
@@ -38,6 +41,6 @@ public class FraudDetectionRule implements TransactionRule {
     @Override
     public void apply(Account account, Entry entry) {
         observable.alert(Event.FRAUD_TRANSACTION_ALERT, account);
-//        throw new FraudTransactionException("Possible fraud transaction");
+        throw new FraudTransactionException("Possible fraud transaction");
     }
 }

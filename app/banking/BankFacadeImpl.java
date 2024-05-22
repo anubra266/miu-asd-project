@@ -4,10 +4,9 @@ import app.banking.customer.Individual;
 import app.banking.customer.Organization;
 import app.banking.strategies.CheckingPercentageStrategy;
 import app.banking.strategies.SavingPercentageStrategy;
-import app.framework.*;
+import app.framework.domain.*;
 import app.framework.exceptions.AccountAlreadyExistsException;
 import app.framework.exceptions.AccountNotFoundException;
-
 
 import java.time.LocalDate;
 

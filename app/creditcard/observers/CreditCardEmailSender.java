@@ -1,8 +1,8 @@
 package app.creditcard.observers;
 
-import app.framework.Event;
-import app.framework.Observable;
-import app.framework.Observer;
+import app.framework.domain.Event;
+import app.framework.domain.Observable;
+import app.framework.domain.Observer;
 
 public class CreditCardEmailSender implements Observer {
     private static CreditCardEmailSender instance = new CreditCardEmailSender();

@@ -6,7 +6,7 @@
 
 package app.banking.strategies;
 
-import app.framework.PercentageStrategy;
+import app.framework.domain.PercentageStrategy;
 
 public class CheckingPercentageStrategy implements PercentageStrategy {
 

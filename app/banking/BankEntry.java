@@ -1,6 +1,6 @@
 package app.banking;
 
-import app.framework.Entry;
+import app.framework.domain.Entry;
 import java.time.LocalDateTime;
 
 public class BankEntry extends Entry {

@@ -6,9 +6,8 @@
 
 package app.banking.rules;
 
-import app.framework.Account;
-import app.framework.Entry;
-import app.framework.TransactionRule;
+import app.framework.domain.Account;
+import app.framework.domain.Entry;
 import app.framework.exceptions.InsufficientBalanceException;
 
 public class CheckingAccountWithdrawRule implements TransactionRule {
