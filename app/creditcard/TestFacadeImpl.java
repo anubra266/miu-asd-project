@@ -6,13 +6,11 @@
 
 package app.creditcard;
 
-import app.banking.BankAccount;
 import app.banking.BankEntry;
 import app.framework.domain.Observer;
 import app.framework.facade.CommonBankFacadeImpl;
 import app.framework.persistence.Database;
 import app.framework.rules.RuleEngine;
-
 import java.util.List;
 
 public class TestFacadeImpl extends CommonBankFacadeImpl<CreditAccount, BankEntry, String> implements TestFacade {
