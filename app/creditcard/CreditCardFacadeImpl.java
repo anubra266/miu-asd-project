@@ -44,7 +44,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
             // New balance = $ 638.75
             // Total amount due = $ 63.88
             double previousBalance = acc.getBalance() - acc.calculateCurrentMonthEntriesBalance();
-
+            return previousBalance;
         });
 
     }

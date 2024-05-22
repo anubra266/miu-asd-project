@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class DAO<T> implements Database<T>{
+public class DAO<T, I> implements Database<T, I>{
     Storage store;
 
     public DAO(String filename){
@@ -19,42 +19,49 @@ public class DAO<T> implements Database<T>{
         this.store = new Storage(path);
     }
 
-     private HashMap<String, T> getMapData(){
-        return (HashMap<String, T>) this.store.read();
+     private HashMap<I, T> getMapData(){
+        return (HashMap<I, T>) this.store.read();
     }
 
 
     @Override
-    public boolean isUnique(String id) {
-        HashMap<String, T> dataMap = (HashMap<String, T>) this.store.read();
+    public boolean isUnique(I id) {
+        HashMap<I, T> dataMap = (HashMap<I, T>) this.store.read();
         return dataMap.containsKey(id);
     }
 
     @Override
-    public void save(String id, T data) {
-        HashMap<String, T> dataMap = (HashMap<String, T>) this.store.read();
+    public void save(I id, T data) {
+        HashMap<I, T> dataMap = (HashMap<I, T>) this.store.read();
         dataMap.put(id,data);
         this.store.save(dataMap);
     }
 
     @Override
-    public void update(String id, T data) {
+    public void update(I id, T data) {
         this.save(id,data);
     }
 
     @Override
-    public T get(String id) {
-        HashMap<String, T> dataMap = this.getMapData();
+    public T get(I id) {
+        HashMap<I, T> dataMap = this.getMapData();
         return dataMap.get(id);
     }
 
     @Override
     public Collection<T> getAll() {
-        HashMap<String, T> dataMap = this.getMapData();
+        HashMap<I, T> dataMap = this.getMapData();
         ArrayList<T> data = new ArrayList<>();
-        for(String id: dataMap.keySet()){
+        for(I id: dataMap.keySet()){
             data.add(dataMap.get(id));
         }
         return data;
+    }
+
+    @Override
+    public void delete(I id) {
+        HashMap<I, T> dataMap = this.getMapData();
+        dataMap.remove(id);
+
     }
 }

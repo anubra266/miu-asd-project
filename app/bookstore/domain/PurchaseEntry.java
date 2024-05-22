@@ -14,5 +14,4 @@ public class PurchaseEntry extends Entry {
     public PurchaseEntry(double amount, LocalDateTime date, String description) {
         super(amount, date, description);
     }
-
 }

@@ -8,7 +8,8 @@ package app.bookstore.service;
 
 import app.bookstore.domain.BookStoreAccount;
 import app.bookstore.domain.PurchaseEntry;
+import app.framework.facade.CommonBankFacade;
 import app.framework.facade.CommonFacade;
 
-public interface BookStoreFacade extends CommonFacade<BookStoreAccount, PurchaseEntry> {
+public interface AccountFacade extends CommonFacade<BookStoreAccount, String> {
 }
