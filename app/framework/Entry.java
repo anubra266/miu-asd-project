@@ -1,17 +1,24 @@
 package app.framework;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Entry {
-    private LocalDate date;
+    private LocalDateTime date;
     private double amount;
 
-    public Entry(double amount, LocalDate date) {
+    private String description;
+
+    public Entry(double amount, LocalDateTime date, String description) {
         this.amount = amount;
         this.date = date;
+        this.description = description;
     }
 
-    public LocalDate getDate() {
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDateTime getDate() {
         return this.date;
     }
 
