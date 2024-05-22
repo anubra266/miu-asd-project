@@ -14,6 +14,7 @@ import app.framework.TransactionRule;
 public class FraudDetectionRule implements TransactionRule {
     @Override
     public boolean matches(Account account, Entry entry) {
+
         return false;
     }
 

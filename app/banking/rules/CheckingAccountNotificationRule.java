@@ -8,6 +8,7 @@ package app.banking.rules;
 
 import app.banking.observers.BankEmailSender;
 import app.framework.*;
+import app.framework.exceptions.InsufficientBalanceException;
 
 public class CheckingAccountNotificationRule implements TransactionRule {
 
@@ -29,6 +30,11 @@ public class CheckingAccountNotificationRule implements TransactionRule {
         return account.getBalance() - entry.getAmount() < 0 || entry.getAmount() > 400;
     }
 
+    /**
+     * Applies the rule, which alerts an observable.
+     * @param account the account to check.
+     * @param entry   the transaction entry.
+     */
     @Override
     public void apply(Account account, Entry entry) {
         observable.alert(Event.TRANSACTION_ALERT, account);
