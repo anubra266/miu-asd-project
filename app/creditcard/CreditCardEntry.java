@@ -5,7 +5,7 @@ import app.framework.Entry;
 import java.time.LocalDate;
 
 public class CreditCardEntry extends Entry {
-    private String name;
+    private final String name;
 
     public CreditCardEntry(double amount, String name, LocalDate date) {
         super(amount, date);
