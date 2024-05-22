@@ -1,8 +1,6 @@
 package app.banking;
 
 import app.framework.Entry;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BankEntry extends Entry {
@@ -21,9 +19,5 @@ public class BankEntry extends Entry {
 
     public String getPartyName() {
         return this.partyName;
-    }
-
-    public String getDescription() {
-        return this.description;
     }
 }
