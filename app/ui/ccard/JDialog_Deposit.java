@@ -1,6 +1,7 @@
 package app.ui.ccard;
 
 import app.creditcard.CreditCardFacadeImpl;
+import app.framework.exceptions.CreditInvalidDepositException;
 
 public class JDialog_Deposit extends javax.swing.JDialog {
 
@@ -86,7 +87,11 @@ public class JDialog_Deposit extends javax.swing.JDialog {
 		parentframe.amountDeposit = amountDepositStr;
 
 		// Call the deposit method on the creditCardService with the deposit amount
-		this.creditCardService.deposit(amountDeposit,"dsfd");
+		try{
+			this.creditCardService.deposit(amountDeposit,"dsfd");
+		}catch(CreditInvalidDepositException ex){
+
+		}
 
 		// Close the dialog
 		dispose();

@@ -59,9 +59,9 @@ public class BankFacadeImpl extends Subject implements BankFacade {
             BankAccount account = new BankAccount(accNr, customer);
             account.setPercentageStrategy(percentageStrategy);
             bankAccountDatabase.save(accNr, account);
-            return;
+        }else{
+            throw new AccountCreationException("Account with number " + accNr + " already exists");
         }
-        throw new AccountCreationException("Account with number " + accNr + " already exists");
     }
 
     @Override

@@ -5,6 +5,8 @@ import app.banking.BankFacadeImpl;
 import app.framework.domain.AccountType;
 import app.framework.exceptions.AccountCreationException;
 
+import javax.swing.*;
+
 public class JDialog_AddCompAcc extends javax.swing.JDialog
 {
     private BankFrm parentframe;
@@ -192,12 +194,14 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog
 		}
 
 		try{
-			this.bankService.createCompanyAccount(accNr, name, street, city, state, zip, numberOfEmployees, email, JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING);
-			parentframe.accountType = "Company";
+			var accType = JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING;
+			this.bankService.createCompanyAccount(accNr, name, street, city, state, zip, numberOfEmployees, email, accType);
+//			parentframe.accountType = "Company";
+			JOptionPane.showMessageDialog(this,"Company" + accType + " Account created Successfully!!!");
+			dispose();
 		}catch( AccountCreationException ex){
-
+			JOptionPane.showMessageDialog(this,ex.getMessage());
 		}
-		dispose();
 
 	}
 
