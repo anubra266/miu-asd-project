@@ -6,10 +6,6 @@ public class GoldMonthlyInterestPercentageStrategy implements PercentageStrategy
 
     private double percent = .06;
 
-    public GoldMonthlyInterestPercentageStrategy(double percent) {
-        this.percent = percent;
-    }
-
     public double getPercent() {
         return percent;
     }
@@ -21,5 +17,9 @@ public class GoldMonthlyInterestPercentageStrategy implements PercentageStrategy
     @Override
     public double getPercentAmount(double amount) {
         return amount * percent;
+    }
+
+    public String getName() {
+        return "GOLD";
     }
 }

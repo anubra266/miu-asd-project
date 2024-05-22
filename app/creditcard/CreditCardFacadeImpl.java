@@ -1,9 +1,15 @@
 package app.creditcard;
 
+import app.creditcard.strategies.BronzeMonthlyInterestPercentageStrategy;
+import app.creditcard.strategies.GoldMonthlyInterestPercentageStrategy;
+import app.creditcard.strategies.SilverMinimumPaymentPercentageStrategy;
 import app.framework.domain.*;
+import app.framework.exceptions.AccountAlreadyExistsException;
+import app.framework.exceptions.CreditInvalidDepositException;
 
 import java.time.LocalDate;
-import java.util.Collection;;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
@@ -20,34 +26,57 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     @Override
     public void createAccount(String name, String street, String city, String state, String zip, String email,
-            String ccNumber, LocalDate exprDate) {
-        if (!this.creditCardDatabase.isUnique(ccNumber)) {
-            throw new IllegalArgumentException("Credit card number already exists");
+            String ccNumber, LocalDate exprDate, String accountType) throws AccountAlreadyExistsException {
+
+        PercentageStrategy percentageStrategy;
+        PercentageStrategy minimumPercentageStrategy;
+        if (accountType.equals("gold")) {
+            percentageStrategy = new GoldMonthlyInterestPercentageStrategy();
+        } else if (accountType.equals("silver")) {
+            percentageStrategy = new SilverMinimumPaymentPercentageStrategy();
+        } else {
+            percentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
         }
-        Address address = new Address(street, city, state, zip);
-        Customer customer = new Customer(name, email, address);
-        CreditAccount account = new CreditAccount(ccNumber, customer);
-        this.creditCardDatabase.save(ccNumber, account);
+
+        if (accountType.equals("gold")) {
+            minimumPercentageStrategy = new GoldMonthlyInterestPercentageStrategy();
+        } else if (accountType.equals("silver")) {
+            minimumPercentageStrategy = new SilverMinimumPaymentPercentageStrategy();
+        } else {
+            minimumPercentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
+        }
+
+        if (this.creditCardDatabase.isUnique(ccNumber)) {
+            Address address = new Address(street, city, state, zip);
+            Customer customer = new Customer(name, email, address);
+            CreditAccount account = new CreditAccount(ccNumber, customer);
+            account.setPercentageStrategy(percentageStrategy);
+            account.setMinimumPaymentStrategy(minimumPercentageStrategy);
+            this.creditCardDatabase.save(ccNumber, account);
+        }
+
+        throw new AccountAlreadyExistsException("Account with cc number " + ccNumber + " already exists");
+
     }
 
     @Override
-    public void generateMonthlyBill() {
+    public Collection<String> generateMonthlyBill() {
         Collection<CreditAccount> accounts = creditCardDatabase.getAll();
-        accounts.stream().map(acc -> {
-            // Name= John White
-            // Address= 1000 Main, Fairfield, IA, 52556
-            // CC number= 2341 3421 4444 5689
-            // CC type= GOLD
-            // Previous balance = $ 100.00
-            // Total Credits = $ 25.00
-            // Total Charges = $ 560.00
-            // New balance = $ 638.75
-            // Total amount due = $ 63.88
+        return accounts.stream().map(acc -> {
             double previousBalance = acc.getBalance() - acc.calculateCurrentMonthEntriesBalance();
-            return null;
+            double totalCharges = acc.calculateCurrentMonthEntriesTotalDebits();
+            double totalCredits = acc.calculateCurrentMonthEntriesTotalCredits();
+            double owedAmount = previousBalance + totalCredits;
+            double owedInterest = acc.getPercentageStrategy().getPercentAmount(owedAmount);
+            double newBalance = owedAmount + owedInterest + totalCharges;
+            double minimumPayment = acc.getMinimumPaymentStrategy().getPercentAmount(newBalance);
 
-        });
-
+            return String.format(
+                    "Name= %s\nAddress= %s\nCC number= %s\nCC type= %s\nPrevious balance = $ %.2f\nTotal Credits = $ %.2f\nTotal Charges = $ %.2f\nNew balance = $ %.2f\nTotal amount due = $ %.2f\n",
+                    acc.getCustomer().getName(), acc.getCustomer().getAddress().toString(), acc.getAccNumber(),
+                    acc.getPercentageStrategy().getName(), previousBalance, totalCredits, totalCharges, newBalance,
+                    minimumPayment);
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -59,8 +88,11 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
     }
 
     @Override
-    public void deposit(double amount, String ccNumber) {
+    public void deposit(double amount, String ccNumber) throws CreditInvalidDepositException {
         CreditAccount account = this.creditCardDatabase.get(ccNumber);
+        if (account.getBalance() >= 0 || account.getBalance() + amount > 0) {
+            throw new CreditInvalidDepositException("Cannot deposit more than you owe");
+        }
         account.deposit(amount, "deposit");
         this.creditCardDatabase.save(ccNumber, account);
         this.alert(Event.DEPOSIT, account);

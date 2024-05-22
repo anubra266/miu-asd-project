@@ -25,4 +25,8 @@ public class BronzeMinimumInterestPercentageStrategy implements PercentageStrate
     public double getPercentAmount(double amount) {
         return amount * percent;
     }
+
+    public String getName() {
+        return "BRONZE";
+    }
 }

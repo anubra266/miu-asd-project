@@ -24,4 +24,8 @@ public class SavingPercentageStrategy implements PercentageStrategy {
     public double getPercentAmount(double amount) {
         return amount * percent;
     }
+
+    public String getName() {
+        return "SAVINGS";
+    }
 }

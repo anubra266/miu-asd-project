@@ -25,4 +25,8 @@ public class SilverMinimumPaymentPercentageStrategy implements PercentageStrateg
         return amount * percent;
     }
 
+    public String getName() {
+        return "SILVER";
+    }
+
 }
