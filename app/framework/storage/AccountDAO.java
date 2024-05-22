@@ -24,7 +24,7 @@ public class AccountDAO implements Database<Account>{
         return AccountDAO.instance;
     }
 
-    private AccountDAO(){
+    public AccountDAO(){
         this.store = new Storage(path);
     }
 
