@@ -1,4 +1,4 @@
-package app.framework.storage;
+package app.framework.persistence;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -13,7 +13,7 @@ public class DAO<T> implements Database<T>{
     public DAO(String filename){
         String OUTPUT_DIR = String.join(
                 File.separator,
-                new String[]{System.getProperty("user.dir"),"app","framework","storage", filename}
+                new String[]{System.getProperty("user.dir"),"app","framework","persistence", filename}
         );
         Path path = FileSystems.getDefault().getPath(OUTPUT_DIR);
         this.store = new Storage(path);

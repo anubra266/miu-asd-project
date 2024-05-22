@@ -1,4 +1,4 @@
-package app.framework.storage;
+package app.framework.persistence;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class Storage {
     Path path;
-    
+
     Storage(Path path){
         this.path = path;
     }

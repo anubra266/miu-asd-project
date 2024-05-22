@@ -1,4 +1,4 @@
-package app.framework.storage;
+package app.framework.persistence;
 
 import java.util.Collection;
 

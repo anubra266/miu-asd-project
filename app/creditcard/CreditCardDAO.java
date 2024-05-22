@@ -1,6 +1,6 @@
 package app.creditcard;
 
-import app.framework.storage.DAO;
+import app.framework.persistence.DAO;
 
 public class CreditCardDAO extends DAO<CreditCardAccount> {
 
