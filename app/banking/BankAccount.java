@@ -6,6 +6,7 @@ import app.framework.domain.Customer;
 import app.framework.domain.Entry;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BankAccount extends Account {
     public BankAccount(String accNumber, Customer customer) {
@@ -14,6 +15,6 @@ public class BankAccount extends Account {
 
     @Override
     public Entry getEntry(double amount,String description) {
-        return new BankEntry(amount,description, LocalDate.now(),"","");
+        return new BankEntry(amount,description, LocalDateTime.now(),"","");
     }
 }

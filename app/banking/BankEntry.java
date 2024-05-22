@@ -1,19 +1,16 @@
 package app.banking;
 
 import app.framework.domain.Entry;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BankEntry extends Entry {
-    private final String description;
     private final String partyAccountNumber;
     private final String partyName;
 
-    public BankEntry(double amount, String description, LocalDate date, String partyAccountNumber, String partyName) {
-        super(amount, date);
+    public BankEntry(double amount, String description, LocalDateTime date, String partyAccountNumber, String partyName) {
+        super(amount, date,description);
         this.partyAccountNumber = partyAccountNumber;
         this.partyName = partyName;
-        this.description = description;
     }
 
     public String getPartyAccountNumber() {
@@ -22,9 +19,5 @@ public class BankEntry extends Entry {
 
     public String getPartyName() {
         return this.partyName;
-    }
-
-    public String getDescription() {
-        return this.description;
     }
 }
