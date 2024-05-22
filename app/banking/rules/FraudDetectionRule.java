@@ -38,6 +38,6 @@ public class FraudDetectionRule implements TransactionRule {
     @Override
     public void apply(Account account, Entry entry) {
         observable.alert(Event.FRAUD_TRANSACTION_ALERT, account);
-//        throw new FraudTransactionException("Possible fraud transaction");
+        throw new FraudTransactionException("Possible fraud transaction");
     }
 }
