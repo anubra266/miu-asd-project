@@ -6,8 +6,6 @@ import app.framework.exceptions.AccountCreationException;
 import app.creditcard.strategies.BronzeMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.GoldMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.SilverMinimumPaymentPercentageStrategy;
-import app.framework.domain.*;
-import app.framework.exceptions.AccountAlreadyExistsException;
 import app.framework.exceptions.CreditInvalidDepositException;
 
 import java.time.LocalDate;
@@ -38,7 +36,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
             PercentageStrategy percentageStrategy;
             PercentageStrategy minimumPaymentStrategy;
-            switch (type){
+            switch (type) {
                 case GOLD:
                     percentageStrategy = new GoldMonthlyInterestPercentageStrategy();
                     minimumPaymentStrategy = new GoldMinimumPaymentPercentageStrategy();
@@ -52,7 +50,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
                     minimumPaymentStrategy = new BronzeMinimumInterestPercentageStrategy();
                     break;
                 default:
-                    throw new AccountCreationException("Invalid Credit card type "+ type);
+                    throw new AccountCreationException("Invalid Credit card type " + type);
 
             }
             account.setPercentageStrategy(percentageStrategy);
@@ -65,7 +63,6 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
 
     }
-
 
     @Override
     public Collection<String> generateMonthlyBill() {
@@ -105,7 +102,6 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         this.creditCardDatabase.save(ccNumber, account);
         this.alert(Event.DEPOSIT, account);
     }
-
 
     @Override
     public void alert(Event event, Object obj) {
