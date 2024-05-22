@@ -1,8 +1,6 @@
 package app.creditcard;
 
-import app.framework.Event;
-import app.framework.Observer;
-import app.framework.Subject;
+import app.framework.*;
 
 import java.time.LocalDate;
 
@@ -20,8 +18,11 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade{
     }
 
     @Override
-    public void createAccount(String name, String street, String city, String state, String zip, String Email, String ccNumber, LocalDate exprDate) {
+    public void createAccount(String name, String street, String city, String state, String zip, String email, String ccNumber, LocalDate exprDate) {
+        Customer cust = new Customer(name,email, new Address(street,city,state,zip));
 
+        CreditAccount ca = new CreditAccount("123",cust);
+        this.creditCardDatabase.save(ca.getAccNumber(),ca);
     }
 
     @Override
