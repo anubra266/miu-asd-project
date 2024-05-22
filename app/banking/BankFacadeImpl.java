@@ -9,8 +9,11 @@ import java.time.LocalDate;
 public class BankFacadeImpl extends Subject implements BankFacade{
 
     private static BankFacadeImpl instance = new BankFacadeImpl();
+    private BankAccountDAO bankAccountDatabase;
 
-    private BankFacadeImpl(){};
+    private BankFacadeImpl(){
+        this.bankAccountDatabase = BankAccountDAO.getInstance();
+    };
 
     public static BankFacadeImpl getInstance(){
         return BankFacadeImpl.instance;

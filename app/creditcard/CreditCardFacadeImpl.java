@@ -9,8 +9,11 @@ import java.time.LocalDate;
 public class CreditCardFacadeImpl extends Subject implements CreditCardFacade{
 
     private static CreditCardFacadeImpl instance = new CreditCardFacadeImpl();
+    private CreditAccountDAO creditCardDatabase;
 
-    private CreditCardFacadeImpl(){};
+    private CreditCardFacadeImpl(){
+        this.creditCardDatabase = CreditAccountDAO.getInstance();
+    };
 
     public static CreditCardFacadeImpl getInstance(){
         return CreditCardFacadeImpl.instance;
