@@ -2,9 +2,9 @@ package app.creditcard;
 
 import app.framework.persistence.DAO;
 
-public class CreditCardDAO extends DAO<CreditCardAccount> {
+public class CreditAccountDAO extends DAO<CreditAccount> {
 
-    public CreditCardDAO() {
+    public CreditAccountDAO() {
         super("credit.store");
     }
 
