@@ -1,20 +1,24 @@
 /**
  * Author: Bayarjargal Jargalsaikhan
  * Date:2024.05.22
- * Time:12:32
+ * Time:14:20
  */
 
 package app.framework.facade;
 
-import app.framework.domain.Account;
-import app.framework.domain.Entry;
+import java.util.Collection;
+import java.util.List;
 
-public interface CommonFacade<R extends Account, T extends Entry> {
-    R create(String id , R r);
+public interface CommonFacade<R, I>{
+    R create(I i, R r);
 
-    void withdraw(R r, T t);
+    R update(I id, R r);
 
-    void deposit(R r, T t);
+    void delete(I id);
 
-    void addInterest();
+    Collection<R> findAll();
+
+    long count();
+
+
 }

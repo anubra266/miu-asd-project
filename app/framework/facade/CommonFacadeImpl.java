@@ -1,78 +1,49 @@
 /**
  * Author: Bayarjargal Jargalsaikhan
  * Date:2024.05.22
- * Time:12:34
+ * Time:14:32
  */
 
 package app.framework.facade;
 
-import app.framework.domain.*;
 import app.framework.persistence.Database;
-import app.framework.rules.RuleEngine;
 
+import javax.xml.crypto.Data;
+import java.util.Collection;
 import java.util.List;
 
-public abstract class CommonFacadeImpl<R extends Account, T extends Entry> implements CommonFacade<R, T>, Observable {
+public abstract class CommonFacadeImpl<R, I> implements CommonFacade<R, I> {
 
-    Database<R> database;
-    RuleEngine ruleEngine;
+    private Database<R, I> database;
 
-    List<Observer> observers;
-
-    public CommonFacadeImpl(Database<R> database, RuleEngine ruleEngine, List<Observer> observers) {
+    public CommonFacadeImpl(Database<R, I> database) {
         this.database = database;
-        this.ruleEngine = ruleEngine;
-        this.observers = observers;
-        observers.stream().forEach(e -> e.subscribe(this));
     }
 
     @Override
-    public R create(String id, R r ) {
-        database.save(id, r);
+    public R create(I i, R r) {
+        database.save(i,r);
         return r;
     }
 
     @Override
-    public void deposit(R r, T t) {
-        try {
-            this.ruleEngine.process(r, t);
-            r.deposit(t.getAmount(), t.getDescription());
-            database.update(r.getAccNumber(), r);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public R update(I i, R r) {
+        database.update(i,r);
+        return r;
     }
 
     @Override
-    public void withdraw(R r, T t) {
-        try {
-            this.ruleEngine.process(r, t);
-            r.withdraw(t.getAmount(), t.getDescription());
-            database.update(r.getAccNumber(), r);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void delete(I i) {
+        database.delete(i);
     }
 
     @Override
-    public void addInterest() {
-        database.getAll().forEach(Account::addInterest);
+    public Collection<R> findAll() {
+        return database.getAll();
     }
 
     @Override
-    public void register(Observer ob) {
-        ob.subscribe(this);
+    public long count() {
+        return database.getAll().stream().count();
     }
-
-    @Override
-    public void unregister(Observer ob) {
-        ob.unsubscribe(this);
-    }
-
-    @Override
-    public void alert(Event event, Object ob) {
-        observers.forEach(e -> e.callback(event, ob));
-    }
-
-
 }

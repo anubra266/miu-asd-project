@@ -14,8 +14,7 @@ import app.framework.domain.Observer;
 
 import java.util.List;
 
-public class EntryAmountNotificationRule implements NotificationRule, Observable {
-
+public class EntryAmountNotificationRule extends NotificationRule {
 
     List<Observer> observers;
     public EntryAmountNotificationRule(List<Observer> observers) {
