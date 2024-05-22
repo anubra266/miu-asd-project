@@ -1,5 +1,8 @@
 package app.creditcard;
 
+import app.creditcard.strategies.*;
+import app.framework.domain.*;
+import app.framework.exceptions.AccountCreationException;
 import app.creditcard.strategies.BronzeMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.GoldMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.SilverMinimumPaymentPercentageStrategy;
@@ -26,38 +29,43 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     @Override
     public void createAccount(String name, String street, String city, String state, String zip, String email,
-            String ccNumber, LocalDate exprDate, String accountType) throws AccountAlreadyExistsException {
+            String ccNumber, LocalDate exprDate, CreditCardType type) throws AccountCreationException {
 
-        PercentageStrategy percentageStrategy;
-        PercentageStrategy minimumPercentageStrategy;
-        if (accountType.equals("gold")) {
-            percentageStrategy = new GoldMonthlyInterestPercentageStrategy();
-        } else if (accountType.equals("silver")) {
-            percentageStrategy = new SilverMinimumPaymentPercentageStrategy();
-        } else {
-            percentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
-        }
-
-        if (accountType.equals("gold")) {
-            minimumPercentageStrategy = new GoldMonthlyInterestPercentageStrategy();
-        } else if (accountType.equals("silver")) {
-            minimumPercentageStrategy = new SilverMinimumPaymentPercentageStrategy();
-        } else {
-            minimumPercentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
-        }
-
-        if (this.creditCardDatabase.isUnique(ccNumber)) {
+        if (creditCardDatabase.isUnique(ccNumber)) {
             Address address = new Address(street, city, state, zip);
             Customer customer = new Customer(name, email, address);
-            CreditAccount account = new CreditAccount(ccNumber, customer);
+            CreditAccount account = new CreditAccount(ccNumber, customer, exprDate);
+
+            PercentageStrategy percentageStrategy;
+            PercentageStrategy minimumPaymentStrategy;
+            switch (type){
+                case GOLD:
+                    percentageStrategy = new GoldMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new GoldMinimumPaymentPercentageStrategy();
+                    break;
+                case SILVER:
+                    percentageStrategy = new SilverMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new SilverMinimumPaymentPercentageStrategy();
+                    break;
+                case BRONZE:
+                    percentageStrategy = new BronzeMonthlyInterestPercentageStrategy();
+                    minimumPaymentStrategy = new BronzeMinimumInterestPercentageStrategy();
+                    break;
+                default:
+                    throw new AccountCreationException("Invalid Credit card type "+ type);
+
+            }
             account.setPercentageStrategy(percentageStrategy);
-            account.setMinimumPaymentStrategy(minimumPercentageStrategy);
+            account.setMinimumPaymentStrategy(minimumPaymentStrategy);
+
             this.creditCardDatabase.save(ccNumber, account);
+            return;
         }
 
-        throw new AccountAlreadyExistsException("Account with cc number " + ccNumber + " already exists");
+        throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
 
     }
+
 
     @Override
     public Collection<String> generateMonthlyBill() {
@@ -97,6 +105,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         this.creditCardDatabase.save(ccNumber, account);
         this.alert(Event.DEPOSIT, account);
     }
+
 
     @Override
     public void alert(Event event, Object obj) {

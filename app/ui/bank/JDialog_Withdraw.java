@@ -1,12 +1,18 @@
 package app.ui.bank;
 
+import app.banking.BankFacadeImpl;
+
+import javax.swing.*;
+
 public class JDialog_Withdraw extends javax.swing.JDialog {
 
 	private BankFrm parentframe;
 	private String accnr;
+	BankFacadeImpl bankService;
 
 	public JDialog_Withdraw(BankFrm parent, String aaccnr) {
 		super(parent);
+		this.bankService = BankFacadeImpl.getInstance();
 		parentframe = parent;
 		accnr = aaccnr;
 
@@ -69,7 +75,24 @@ public class JDialog_Withdraw extends javax.swing.JDialog {
 	}
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-		parentframe.amountDeposit = JTextField_AMT.getText();
+//		parentframe.amountDeposit = JTextField_AMT.getText();
+//		dispose();
+		String amountStr = JTextField_AMT.getText();
+
+		try {
+			double amount = Double.parseDouble(amountStr);
+			this.bankService.withDraw("withdraw",amount);
+		} catch (NumberFormatException e) {
+
+			// Handle the case when the input is not a valid number
+
+			JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+			return; // Exit the method if there's an error
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(this, "Try Again!!!", "unable to withdraw", JOptionPane.ERROR_MESSAGE);
+		}
+
+
 		dispose();
 	}
 

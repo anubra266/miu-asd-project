@@ -1,5 +1,7 @@
 package app.creditcard;
 
+import app.framework.exceptions.AccountCreationException;
+
 import java.time.LocalDate;
 
 import app.framework.exceptions.AccountAlreadyExistsException;
@@ -8,7 +10,7 @@ import java.util.Collection;
 
 public interface CreditCardFacade {
     void createAccount(String name, String street, String city, String state, String zip, String Email, String ccNumber,
-            LocalDate exprDate, String accountType) throws AccountAlreadyExistsException;
+            LocalDate exprDate, CreditCardType type)  throws AccountCreationException;
 
     Collection<String> generateMonthlyBill();
 

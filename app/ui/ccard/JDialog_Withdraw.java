@@ -1,12 +1,16 @@
 package app.ui.ccard;
 
+import app.creditcard.CreditCardFacadeImpl;
+
 public class JDialog_Withdraw extends javax.swing.JDialog {
 
 	private CardFrm parentframe;
 	private String name;
+	CreditCardFacadeImpl creditCardService;
 
 	public JDialog_Withdraw(CardFrm parent, String aname) {
 		super(parent);
+		this.creditCardService = CreditCardFacadeImpl.getInstance();
 		parentframe = parent;
 		name = aname;
 
@@ -69,7 +73,20 @@ public class JDialog_Withdraw extends javax.swing.JDialog {
 	}
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-		parentframe.amountDeposit = JTextField_AMT.getText();
+		//parentframe.amountDeposit = JTextField_AMT.getText();
+		//dispose();
+		String amountDepositStr = JTextField_AMT.getText();
+
+		// Convert the amount string to a double
+		double amountDeposit = Double.parseDouble(amountDepositStr);
+
+		// Update the parent frame with the deposit amount as a string
+		parentframe.amountDeposit = amountDepositStr;
+
+		// Call the chargeAmount method on the creditCardService with the deposit amount
+		this.creditCardService.chargeAmount(amountDeposit,"sdf");
+
+		// Close the dialog
 		dispose();
 	}
 
