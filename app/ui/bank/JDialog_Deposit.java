@@ -7,9 +7,29 @@ import javax.swing.*;
 
 public class JDialog_Deposit extends javax.swing.JDialog {
 
+	class SymAction implements java.awt.event.ActionListener {
+		public void actionPerformed(java.awt.event.ActionEvent event) {
+			Object object = event.getSource();
+			if (object == JButton_OK)
+				JButtonOK_actionPerformed(event);
+			else if (object == JButton_Cancel)
+				JButtonCalcel_actionPerformed(event);
+		}
+	}
+
 	private BankFrm parentframe;
 	private String accnr;
+
 	BankFacadeImpl bankService;
+
+	// {{DECLARE_CONTROLS
+	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
+	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
+	javax.swing.JButton JButton_OK = new javax.swing.JButton();
+	javax.swing.JButton JButton_Cancel = new javax.swing.JButton();
+	javax.swing.JTextField JTextField_Deposit = new javax.swing.JTextField();
+	// }}
 
 	public JDialog_Deposit(BankFrm parent, String aaccnr) {
 		super(parent);
@@ -58,40 +78,20 @@ public class JDialog_Deposit extends javax.swing.JDialog {
 		// }}
 	}
 
-	// {{DECLARE_CONTROLS
-	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
-	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
-	javax.swing.JButton JButton_OK = new javax.swing.JButton();
-	javax.swing.JButton JButton_Cancel = new javax.swing.JButton();
-	javax.swing.JTextField JTextField_Deposit = new javax.swing.JTextField();
-	// }}
+	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
+		parentframe.amountDeposit = JTextField_Deposit.getText();
 
-	class SymAction implements java.awt.event.ActionListener {
-		public void actionPerformed(java.awt.event.ActionEvent event) {
-			Object object = event.getSource();
-			if (object == JButton_OK)
-				JButtonOK_actionPerformed(event);
-			else if (object == JButton_Cancel)
-				JButtonCalcel_actionPerformed(event);
-		}
-	}
-
-	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event)  {
-//		parentframe.amountDeposit = JTextField_Deposit.getText();
-//		dispose();
+		String accNumber = JTextField_NAME.getText();
 		String amountStr = JTextField_Deposit.getText();
 		double amount = Double.parseDouble(amountStr);
 		parentframe.amountDeposit = amountStr;
 
-		try{
-			this.bankService.deposit("sdfs",amount);
-		}catch(AccountNotFoundException ex) {
-
+		try {
+			this.bankService.deposit(accNumber, amount);
+			dispose();
+		} catch (AccountNotFoundException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
-
-		// Close the dialog
-		dispose();
 
 	}
 

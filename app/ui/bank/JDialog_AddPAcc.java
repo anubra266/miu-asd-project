@@ -15,8 +15,52 @@ import app.framework.exceptions.AccountCreationException;
 import javax.swing.*;
 
 public class JDialog_AddPAcc extends javax.swing.JDialog {
+	class SymMouse extends java.awt.event.MouseAdapter {
+		public void mouseClicked(java.awt.event.MouseEvent event) {
+			Object object = event.getSource();
+			if (object == JRadioButton_Chk)
+				JRadioButtonChk_mouseClicked(event);
+			else if (object == JRadioButton_Sav)
+				JRadioButtonSav_mouseClicked(event);
+		}
+	}
+
+	class SymAction implements java.awt.event.ActionListener {
+		public void actionPerformed(java.awt.event.ActionEvent event) {
+			Object object = event.getSource();
+			if (object == JButton_OK)
+				JButtonOK_actionPerformed(event);
+			else if (object == JButton_Cancel)
+				JButtonCalcel_actionPerformed(event);
+		}
+	}
+
 	private BankFrm parentframe;
+
 	BankFacadeImpl bankService;
+	// {{DECLARE_CONTROLS
+	javax.swing.JRadioButton JRadioButton_Chk = new javax.swing.JRadioButton();
+	javax.swing.JRadioButton JRadioButton_Sav = new javax.swing.JRadioButton();
+	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel3 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel4 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel5 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel6 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel7 = new javax.swing.JLabel();
+	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_CT = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_ST = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_STR = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_ZIP = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_BD = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_EM = new javax.swing.JTextField();
+	javax.swing.JButton JButton_OK = new javax.swing.JButton();
+	javax.swing.JButton JButton_Cancel = new javax.swing.JButton();
+	javax.swing.JTextField JTextField_ACNR = new javax.swing.JTextField();
+
+	javax.swing.JLabel JLabel8 = new javax.swing.JLabel();
+	// }}
 
 	public JDialog_AddPAcc(BankFrm parent) {
 		super(parent);
@@ -111,39 +155,6 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 		// }}
 	}
 
-	// {{DECLARE_CONTROLS
-	javax.swing.JRadioButton JRadioButton_Chk = new javax.swing.JRadioButton();
-	javax.swing.JRadioButton JRadioButton_Sav = new javax.swing.JRadioButton();
-	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel3 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel4 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel5 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel6 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel7 = new javax.swing.JLabel();
-	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_CT = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_ST = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_STR = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_ZIP = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_BD = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_EM = new javax.swing.JTextField();
-	javax.swing.JButton JButton_OK = new javax.swing.JButton();
-	javax.swing.JButton JButton_Cancel = new javax.swing.JButton();
-	javax.swing.JTextField JTextField_ACNR = new javax.swing.JTextField();
-	javax.swing.JLabel JLabel8 = new javax.swing.JLabel();
-	// }}
-
-	class SymMouse extends java.awt.event.MouseAdapter {
-		public void mouseClicked(java.awt.event.MouseEvent event) {
-			Object object = event.getSource();
-			if (object == JRadioButton_Chk)
-				JRadioButtonChk_mouseClicked(event);
-			else if (object == JRadioButton_Sav)
-				JRadioButtonSav_mouseClicked(event);
-		}
-	}
-
 	void JRadioButtonChk_mouseClicked(java.awt.event.MouseEvent event) {
 		// When Checking radio is clicked make this radio on
 		// and make Saving account radio off
@@ -159,16 +170,6 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 
 	}
 
-	class SymAction implements java.awt.event.ActionListener {
-		public void actionPerformed(java.awt.event.ActionEvent event) {
-			Object object = event.getSource();
-			if (object == JButton_OK)
-				JButtonOK_actionPerformed(event);
-			else if (object == JButton_Cancel)
-				JButtonCalcel_actionPerformed(event);
-		}
-	}
-
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
 		String accNr = JTextField_ACNR.getText();
 		String name = JTextField_NAME.getText();
@@ -180,19 +181,21 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 		String email = JTextField_EM.getText();
 
 		// Check if any required field is empty
-		if (accNr.isEmpty() || name.isEmpty() || street.isEmpty() || city.isEmpty() || zip.isEmpty() || state.isEmpty()
-				|| birthDateString.isEmpty() || email.isEmpty()) {
-			System.err.println("Please fill in all fields.");
+		if (accNr.isEmpty()) {
+			System.err.println("Please enter account number.");
 			return;
 		}
 
 		// Attempt to parse the birth date string to LocalDate
-		LocalDate birthDate;
-		try {
-			birthDate = LocalDate.parse(birthDateString);
-		} catch (DateTimeParseException e) {
-			System.err.println("Invalid birth date format. Please use yyyy-MM-dd.");
-			return;
+		LocalDate birthDate = null;
+		if (!birthDateString.isEmpty()) {
+			try {
+				birthDate = LocalDate.parse(birthDateString);
+			} catch (DateTimeParseException e) {
+				System.err.println("Invalid birth date format. Please use yyyy-MM-dd.");
+				return;
+			}
+
 		}
 
 		// Call the createPersonalAccount method of the bankService

@@ -14,4 +14,9 @@ public class Organization extends Customer {
     public long getNumberOfEmployees() {
         return this.numberOfEmployees;
     }
+
+    @Override
+    public String getCustomerType() {
+        return "Company";
+    };
 }

@@ -5,19 +5,24 @@ import app.banking.strategies.SavingPercentageStrategy;
 import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
+import app.framework.exceptions.InsufficientBalanceException;
+
+import java.util.Collection;
 
 public class BankFacadeImpl extends BankFacade {
 
     private static BankFacadeImpl instance = new BankFacadeImpl();
-    private BankAccountDAO bankAccountDatabase;
-    PercentageStrategy percentageStrategy;
-
-    private BankFacadeImpl() {
-        this.bankAccountDatabase = BankAccountDAO.getInstance();
-    };
 
     public static BankFacadeImpl getInstance() {
         return BankFacadeImpl.instance;
+    }
+
+    private BankAccountDAO bankAccountDatabase;
+
+    PercentageStrategy percentageStrategy;;
+
+    private BankFacadeImpl() {
+        this.bankAccountDatabase = BankAccountDAO.getInstance();
     }
 
     public void createAccount(Customer customer, String accNr, AccountType accountType)
@@ -43,11 +48,14 @@ public class BankFacadeImpl extends BankFacade {
     public void withDraw(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
         if (bankAccount != null) {
+            if (bankAccount.getBalance() < amount) {
+                throw new InsufficientBalanceException(
+                        "Account with number " + accNumber + " does not have enough balance");
+            }
             bankAccount.withdraw(amount, "Amount withdraw");
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
             return;
         }
-
         throw new AccountNotFoundException("Account with number " + accNumber + " does not exist");
     }
 
@@ -63,12 +71,15 @@ public class BankFacadeImpl extends BankFacade {
     }
 
     @Override
-    public void addInterest(String accNumber) {
-        BankAccount bankAccount = bankAccountDatabase.get(accNumber);
-        if (bankAccount != null) {
+    public void addInterest() {
+        for (BankAccount bankAccount : bankAccountDatabase.getAll()) {
             bankAccount.addInterest();
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
         }
+    }
+
+    public Collection<BankAccount> getAccounts() {
+        return this.bankAccountDatabase.getAll();
     }
 
     @Override

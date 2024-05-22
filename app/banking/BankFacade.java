@@ -13,9 +13,6 @@ import java.time.LocalDate;
 
 abstract class BankFacade extends Subject {
 
-    abstract void createAccount(Customer customer, String accNr, AccountType accountType)
-            throws AccountCreationException;
-
     public void createAccount(String accNr, String name, String street, String city, String state, String zip,
             String email, AccountType accountType, LocalDate birthDate) throws AccountCreationException {
         Address address = new Address(street, state, city, zip);
@@ -31,9 +28,12 @@ abstract class BankFacade extends Subject {
         createAccount(customer, accNr, accountType);
     }
 
+    abstract void createAccount(Customer customer, String accNr, AccountType accountType)
+            throws AccountCreationException;
+
     abstract void withDraw(String accNumber, double amount) throws AccountNotFoundException;
 
     abstract void deposit(String accNumber, double amount) throws AccountNotFoundException;
 
-    abstract void addInterest(String accNumber);
+    abstract void addInterest();
 }

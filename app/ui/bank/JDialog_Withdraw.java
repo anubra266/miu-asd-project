@@ -1,14 +1,33 @@
 package app.ui.bank;
 
 import app.banking.BankFacadeImpl;
+import app.framework.exceptions.AccountNotFoundException;
 
 import javax.swing.*;
 
 public class JDialog_Withdraw extends javax.swing.JDialog {
 
+	class SymAction implements java.awt.event.ActionListener {
+		public void actionPerformed(java.awt.event.ActionEvent event) {
+			Object object = event.getSource();
+			if (object == JButton_OK)
+				JButtonOK_actionPerformed(event);
+			else if (object == JButton_Calcel)
+				JButtonCalcel_actionPerformed(event);
+		}
+	}
+
 	private BankFrm parentframe;
 	private String accnr;
+
 	BankFacadeImpl bankService;
+
+	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
+	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
+	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
+	javax.swing.JTextField JTextField_AMT = new javax.swing.JTextField();
+	javax.swing.JButton JButton_OK = new javax.swing.JButton();
+	javax.swing.JButton JButton_Calcel = new javax.swing.JButton();
 
 	public JDialog_Withdraw(BankFrm parent, String aaccnr) {
 		super(parent);
@@ -57,43 +76,26 @@ public class JDialog_Withdraw extends javax.swing.JDialog {
 
 	}
 
-	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
-	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
-	javax.swing.JTextField JTextField_NAME = new javax.swing.JTextField();
-	javax.swing.JTextField JTextField_AMT = new javax.swing.JTextField();
-	javax.swing.JButton JButton_OK = new javax.swing.JButton();
-	javax.swing.JButton JButton_Calcel = new javax.swing.JButton();
-
-	class SymAction implements java.awt.event.ActionListener {
-		public void actionPerformed(java.awt.event.ActionEvent event) {
-			Object object = event.getSource();
-			if (object == JButton_OK)
-				JButtonOK_actionPerformed(event);
-			else if (object == JButton_Calcel)
-				JButtonCalcel_actionPerformed(event);
-		}
-	}
-
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-//		parentframe.amountDeposit = JTextField_AMT.getText();
-//		dispose();
+		String accNumber = JTextField_NAME.getText();
 		String amountStr = JTextField_AMT.getText();
+
+		parentframe.amountDeposit = amountStr;
 
 		try {
 			double amount = Double.parseDouble(amountStr);
-			this.bankService.withDraw("withdraw",amount);
+			this.bankService.withDraw(accNumber, amount);
+			dispose();
+		} catch (AccountNotFoundException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} catch (NumberFormatException e) {
-
 			// Handle the case when the input is not a valid number
-
-			JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Invalid Input",
+					JOptionPane.ERROR_MESSAGE);
 			return; // Exit the method if there's an error
-		}catch(Exception ex){
-			JOptionPane.showMessageDialog(this, "Try Again!!!", "unable to withdraw", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
-
-
-		dispose();
 	}
 
 	void JButtonCalcel_actionPerformed(java.awt.event.ActionEvent event) {
