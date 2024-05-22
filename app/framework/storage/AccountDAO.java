@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class AccountStorage implements Database<Account>{
-    private static AccountStorage instance = new AccountStorage();
+public class AccountDAO implements Database<Account>{
+    private static AccountDAO instance = new AccountDAO();
     Storage store;
 
     public static final String OUTPUT_DIR = String.join(
             File.separator,
-            new String[]{System.getProperty("user.dir"),"app","framework","storage",".accounts"}
+            new String[]{System.getProperty("user.dir"),"app","framework","storage","accounts.store"}
     );
 
     Path path = FileSystems.getDefault().getPath(OUTPUT_DIR);
 
-    public static AccountStorage getInstance(){
-        return AccountStorage.instance;
+    public static AccountDAO getInstance(){
+        return AccountDAO.instance;
     }
 
-    private AccountStorage(){
+    private AccountDAO(){
         this.store = new Storage(path);
     }
 
@@ -46,13 +46,13 @@ public class AccountStorage implements Database<Account>{
 
     @Override
     public Account get(String accountNumber) {
-        HashMap<String, Account> accounts = (HashMap<String, Account>) this.store.read();
+        HashMap<String, Account> accounts = this.getAccounts();
         return accounts.get(accountNumber);
     }
 
     @Override
     public Collection<Account> getAll() {
-        HashMap<String, Account> accountsMap = (HashMap<String, Account>) this.store.read();
+        HashMap<String, Account> accountsMap = this.getAccounts();
         ArrayList<Account> accounts = new ArrayList<>();
         for(String id: accountsMap.keySet()){
             accounts.add(accountsMap.get(id));
