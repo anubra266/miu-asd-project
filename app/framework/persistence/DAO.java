@@ -23,6 +23,13 @@ public class DAO<T> implements Database<T>{
         return (HashMap<String, T>) this.store.read();
     }
 
+
+    @Override
+    public boolean isUnique(String id) {
+        HashMap<String, T> dataMap = (HashMap<String, T>) this.store.read();
+        return dataMap.containsKey(id);
+    }
+
     @Override
     public void save(String id, T data) {
         HashMap<String, T> dataMap = (HashMap<String, T>) this.store.read();
