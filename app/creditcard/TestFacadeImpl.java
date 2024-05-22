@@ -15,8 +15,8 @@ import app.framework.rules.RuleEngine;
 
 import java.util.List;
 
-public class TestFacadeImpl extends CommonBankFacadeImpl<BankAccount, BankEntry, String> implements TestFacade {
-    public TestFacadeImpl(Database<BankAccount, String> database, RuleEngine ruleEngine, List<Observer> observers) {
+public class TestFacadeImpl extends CommonBankFacadeImpl<CreditAccount, BankEntry, String> implements TestFacade {
+    public TestFacadeImpl(Database<CreditAccount, String> database, RuleEngine ruleEngine, List<Observer> observers) {
         super(database, ruleEngine, observers);
     }
 }

@@ -34,6 +34,7 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
             this.ruleEngine.process(r, t);
             r.deposit(t.getAmount(), t.getDescription());
             database.update((I) r.getAccNumber(), r);
+            alert(Event.DEPOSIT, r);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,6 +46,7 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
             this.ruleEngine.process(r, t);
             r.withdraw(t.getAmount(), t.getDescription());
             database.update((I) r.getAccNumber(), r);
+            alert(Event.WITHDRAW, r);
         } catch (Exception e) {
             e.printStackTrace();
         }
