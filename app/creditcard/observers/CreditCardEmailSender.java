@@ -1,5 +1,6 @@
 package app.creditcard.observers;
 
+import app.framework.Event;
 import app.framework.Observable;
 import app.framework.Observer;
 
@@ -22,7 +23,7 @@ public class CreditCardEmailSender implements Observer {
         subject.unregister(this);
     }
 
-    public void callback(Object ob){
+    public void callback(Event event, Object ob){
         System.out.println("Credit Card Account Transaction");
     };
 }

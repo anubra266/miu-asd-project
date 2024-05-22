@@ -1,6 +1,6 @@
 package app.banking.observers;
 
-import app.creditcard.observers.CreditCardEmailSender;
+import app.framework.Event;
 import app.framework.Observable;
 import app.framework.Observer;
 
@@ -24,7 +24,7 @@ public class BankEmailSender implements Observer {
     }
 
     @Override
-    public void callback(Object ob) {
+    public void callback(Event event, Object ob) {
         System.out.println("Bank Account Transaction");
     }
 }
