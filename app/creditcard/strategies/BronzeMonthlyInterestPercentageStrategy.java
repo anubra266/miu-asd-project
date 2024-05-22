@@ -10,11 +10,11 @@ import app.framework.domain.PercentageStrategy;
 
 public class BronzeMonthlyInterestPercentageStrategy implements PercentageStrategy {
 
-
     private double percent = .1;
 
     public BronzeMonthlyInterestPercentageStrategy() {
     }
+
 
     public double getPercent() {
         return percent;
@@ -27,5 +27,9 @@ public class BronzeMonthlyInterestPercentageStrategy implements PercentageStrate
     @Override
     public double getPercentAmount(double amount) {
         return amount * percent;
+    }
+
+    public String getName() {
+        return "BRONZE";
     }
 }

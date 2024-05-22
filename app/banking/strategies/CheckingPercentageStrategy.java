@@ -24,4 +24,8 @@ public class CheckingPercentageStrategy implements PercentageStrategy {
     public double getPercentAmount(double amount) {
         return amount * percent;
     }
+
+    public String getName() {
+        return "CHECKINGS";
+    }
 }

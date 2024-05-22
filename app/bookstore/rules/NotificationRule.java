@@ -8,7 +8,8 @@ package app.bookstore.rules;
 
 import app.bookstore.domain.BookStoreAccount;
 import app.bookstore.domain.PurchaseEntry;
+import app.framework.domain.Observable;
 import app.framework.rules.Rule;
 
-public interface NotificationRule extends Rule<BookStoreAccount, PurchaseEntry> {
+public abstract class NotificationRule implements Rule<BookStoreAccount, PurchaseEntry>, Observable {
 }

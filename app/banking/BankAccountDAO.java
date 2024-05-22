@@ -2,7 +2,7 @@ package app.banking;
 
 import app.framework.persistence.DAO;
 
-public class BankAccountDAO extends DAO<BankAccount> {
+public class BankAccountDAO extends DAO<BankAccount, String> {
 
     private static BankAccountDAO instance = new BankAccountDAO();
 
