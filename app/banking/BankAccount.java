@@ -1,6 +1,5 @@
 package app.banking;
 
-import app.creditcard.CreditCardEntry;
 import app.framework.Account;
 import app.framework.Customer;
 import app.framework.Entry;
@@ -13,20 +12,7 @@ public class BankAccount extends Account {
     }
 
     @Override
-    public void deposit(double amount,String description) {
-        CreditCardEntry entry = new CreditCardEntry(amount,description, LocalDate.now());
-        this.addEntry(entry);
-    }
-
-    @Override
-    public void withdraw(double amount, String description) {
-        CreditCardEntry entry = new CreditCardEntry(-amount,description, LocalDate.now());
-        this.addEntry(entry);
-    }
-
-
-    @Override
-    public Entry getInterestEntry(double amount) {
-        return new BankEntry(amount,"interest", LocalDate.now(),"","");
+    public Entry getEntry(double amount,String description) {
+        return new BankEntry(amount,description, LocalDate.now(),"","");
     }
 }

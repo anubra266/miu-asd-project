@@ -4,7 +4,7 @@ import app.framework.Account;
 import app.framework.Customer;
 import app.framework.Entry;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CreditAccount extends Account {
     public CreditAccount(String accNumber, Customer customer) {
@@ -12,16 +12,8 @@ public class CreditAccount extends Account {
     }
 
     @Override
-    public void withdraw(double amount, String description) {
-        CreditCardEntry entry = new CreditCardEntry(amount, description, LocalDate.now());
-        this.addEntry(entry);
-    }
-
-    @Override
-    public void deposit(double amount, String description) {
-        CreditCardEntry entry = new CreditCardEntry(amount, description, LocalDate.now());
-        this.addEntry(entry);
-    }
+    public Entry getEntry(double amount,String description) {
+        return new CreditCardEntry(amount, description, LocalDateTime.now());
 
     @Override
     public Entry getInterestEntry(double amount) {

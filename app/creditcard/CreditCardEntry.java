@@ -2,17 +2,11 @@ package app.creditcard;
 
 import app.framework.Entry;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CreditCardEntry extends Entry {
-    private final String name;
 
-    public CreditCardEntry(double amount, String name, LocalDate date) {
-        super(amount, date);
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
+    public CreditCardEntry(double amount, String description, LocalDateTime date) {
+        super(amount, date, description);
     }
 }

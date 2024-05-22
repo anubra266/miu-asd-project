@@ -58,17 +58,25 @@ public abstract class Account {
 
     public void addInterest() {
         double interest = this.percentageStrategy.getPercentAmount(getBalance());
-        Entry entry = this.getInterestEntry(interest);
+        Entry entry = this.getEntry(interest, "interest");
         this.addEntry(entry);
     }
 
-    public abstract void deposit(double amount, String description);
 
-    public abstract void withdraw(double amount, String description);
+    public void deposit(double amount, String description){
+        Entry entry = this.getEntry(amount, description);
+        this.addEntry(entry);
+    };
 
-    public abstract Entry getInterestEntry(double amount);
+
+    public void withdraw(double amount, String description){
+        Entry entry = this.getEntry(-amount, description);
+        this.addEntry(entry);
+    };
+
+    public abstract Entry getEntry(double amount, String description);
 
     public List<Entry> getEntryList() {
-        return entryList;
+        return this.entryList;
     }
 }

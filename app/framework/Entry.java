@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public class Entry {
     private LocalDateTime date;
     private double amount;
-
     private String description;
 
     public Entry(double amount, LocalDateTime date, String description) {
@@ -15,7 +14,7 @@ public class Entry {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public LocalDateTime getDate() {
