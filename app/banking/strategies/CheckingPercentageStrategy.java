@@ -1,17 +1,16 @@
 /**
  * Author: Bayarjargal Jargalsaikhan
  * Date:2024.05.21
- * Time:11:39
+ * Time:11:31
  */
 
-package app.creditcard.strategy;
+package app.banking.strategies;
 
 import app.framework.PercentageStrategy;
 
-public class BronzeMinimumInterestPercentageStrategy implements PercentageStrategy {
+public class CheckingPercentageStrategy implements PercentageStrategy {
 
-    private double percent = .14;
-
+    private double percent = .01;
 
     public double getPercent() {
         return percent;
