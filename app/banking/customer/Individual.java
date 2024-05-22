@@ -9,7 +9,7 @@ public class Individual extends Customer {
 
     private final LocalDate dateOfBirth;
 
-    Individual(String name, String email, Address address, LocalDate dob){
+    public Individual(String name, String email, Address address, LocalDate dob){
         super(name,email,address);
         this.dateOfBirth = dob;
     }

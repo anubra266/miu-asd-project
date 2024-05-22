@@ -1,5 +1,6 @@
 package app.framework;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,10 @@ public abstract class Account {
     public Account(String accNumber, Customer customer) {
         this.accNumber = accNumber;
         this.customer = customer;
+    }
+
+    public void addEntry(Entry entry){
+        this.entryList.add(entry);
     }
 
     public void setPercentageStrategy(PercentageStrategy strategy){
@@ -37,12 +42,18 @@ public abstract class Account {
     public void addInterest() {
         double interest = this.percentageStrategy.getPercentAmount(getBalance());
         Entry entry = this.getInterestEntry(interest);
-        entryList.add(entry);
+        this.addEntry(entry);
     }
 
-    public abstract void deposit(double amount);
+    public void deposit(double amount, String description) throws OperationNotSupportedException {
+        throw new OperationNotSupportedException();
+    };
 
-    public abstract void withdraw(double amount);
+    public abstract void withdraw(double amount, String description);
 
     public abstract Entry getInterestEntry(double amount);
+
+    public List<Entry> getEntryList() {
+        return entryList;
+    }
 }
