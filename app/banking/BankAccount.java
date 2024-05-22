@@ -1,11 +1,9 @@
 package app.banking;
 
-import app.creditcard.CreditCardEntry;
 import app.framework.domain.Account;
 import app.framework.domain.Customer;
 import app.framework.domain.Entry;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BankAccount extends Account {

@@ -48,6 +48,10 @@ public abstract class Account {
                 .sum();
     }
 
+    public PercentageStrategy getPercentageStrategy() {
+        return this.percentageStrategy;
+    }
+
     public double getBalance() {
         double balance = 0;
         for (Entry entry : entryList) {
