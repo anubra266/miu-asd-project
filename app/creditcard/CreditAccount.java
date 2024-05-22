@@ -13,7 +13,13 @@ public class CreditAccount extends Account {
 
     @Override
     public void withdraw(double amount, String description) {
-        CreditCardEntry entry = new CreditCardEntry(amount,description, LocalDate.now());
+        CreditCardEntry entry = new CreditCardEntry(amount, description, LocalDate.now());
+        this.addEntry(entry);
+    }
+
+    @Override
+    public void deposit(double amount, String description) {
+        CreditCardEntry entry = new CreditCardEntry(amount, description, LocalDate.now());
         this.addEntry(entry);
     }
 
