@@ -27,12 +27,14 @@ public class DAO<T, I> implements Database<T, I>{
     @Override
     public boolean isUnique(I id) {
         HashMap<I, T> dataMap = (HashMap<I, T>) this.store.read();
-        return dataMap.containsKey(id);
+        if(dataMap == null) return true;
+        return !dataMap.containsKey(id);
     }
 
     @Override
     public void save(I id, T data) {
         HashMap<I, T> dataMap = (HashMap<I, T>) this.store.read();
+        if(dataMap == null) dataMap = new HashMap<>();
         dataMap.put(id,data);
         this.store.save(dataMap);
     }
@@ -62,6 +64,5 @@ public class DAO<T, I> implements Database<T, I>{
     public void delete(I id) {
         HashMap<I, T> dataMap = this.getMapData();
         dataMap.remove(id);
-
     }
 }

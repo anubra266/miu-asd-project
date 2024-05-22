@@ -12,6 +12,8 @@ import java.time.format.DateTimeParseException;
 import app.framework.domain.AccountType;
 import app.framework.exceptions.AccountCreationException;
 
+import javax.swing.*;
+
 public class JDialog_AddPAcc extends javax.swing.JDialog {
 	private BankFrm parentframe;
 	BankFacadeImpl bankService;
@@ -195,10 +197,13 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 
 		// Call the createPersonalAccount method of the bankService
 		try {
+			var accType = JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING;
 			bankService.createAccount(accNr, name, street, city, state, zip, email,
-					JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING, birthDate);
+					accType, birthDate);
+			JOptionPane.showMessageDialog(this, "Personal " + accType + " Account created Successfully!!!");
+			dispose();
 		} catch (AccountCreationException ex) {
-
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 
 	}

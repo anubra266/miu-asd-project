@@ -11,39 +11,43 @@ public class Storage {
 
     Storage(Path path){
         this.path = path;
+        this.ensureFileExists();
+    }
+
+    private void ensureFileExists() {
+        try {
+            if (!Files.exists(this.path)) {
+                // Ensure parent directories exist
+                if (this.path.getParent() != null) {
+                    Files.createDirectories(this.path.getParent());
+                }
+                // Create the file and write a default object
+                Files.createFile(this.path);
+                try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(this.path))) {
+                    out.writeObject(null); // Writing a null object or default content
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Object read() {
-        ObjectInputStream in = null;
+
         Object retVal = null;
-        try {
-            in = new ObjectInputStream(Files.newInputStream(this.path));
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(this.path))) {
             retVal = in.readObject();
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(in != null) {
-                try {
-                    in.close();
-                } catch(Exception e) {}
-            }
         }
         return retVal;
     }
 
     public void save( Object ob ) {
-        ObjectOutputStream out = null;
-        try {
-            out = new ObjectOutputStream(Files.newOutputStream(this.path));
+        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(this.path))) {
             out.writeObject(ob);
         } catch(IOException e) {
             e.printStackTrace();
-        } finally {
-            if(out != null) {
-                try {
-                    out.close();
-                } catch(Exception e) {}
-            }
         }
     }
 }

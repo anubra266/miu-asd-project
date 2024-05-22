@@ -1,6 +1,11 @@
 package app.framework.domain;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
+
+    private static final long serialVersionUID = -891229887654574888L;
+
     private String zip;
     private String state;
     private String street;

@@ -57,10 +57,10 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
             account.setMinimumPaymentStrategy(minimumPaymentStrategy);
 
             this.creditCardDatabase.save(ccNumber, account);
-            return;
+        }else{
+            throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
         }
 
-        throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
 
     }
 

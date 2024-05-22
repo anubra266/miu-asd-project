@@ -1,12 +1,16 @@
 package app.framework.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.stream.Collectors;
 
-public abstract class Account {
+public abstract class Account implements Serializable {
+
+    private static final long serialVersionUID = -891229800414574888L;
+
     private final String accNumber;
     private final Customer customer;
     private PercentageStrategy percentageStrategy;
