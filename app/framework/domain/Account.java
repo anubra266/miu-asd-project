@@ -42,10 +42,28 @@ public abstract class Account {
                 .collect(Collectors.toList());
     }
 
+    public double calculateCurrentMonthEntriesTotalCredits() {
+        return getCurrentMonthEntries().stream()
+                .filter(e -> e.getAmount() > 0)
+                .mapToDouble(Entry::getAmount)
+                .sum();
+    }
+
+    public double calculateCurrentMonthEntriesTotalDebits() {
+        return getCurrentMonthEntries().stream()
+                .filter(e -> e.getAmount() < 0)
+                .mapToDouble(Entry::getAmount)
+                .sum();
+    }
+
     public double calculateCurrentMonthEntriesBalance() {
         return getCurrentMonthEntries().stream()
                 .mapToDouble(Entry::getAmount)
                 .sum();
+    }
+
+    public PercentageStrategy getPercentageStrategy() {
+        return this.percentageStrategy;
     }
 
     public double getBalance() {
@@ -62,14 +80,12 @@ public abstract class Account {
         this.addEntry(entry);
     }
 
-
-    public void deposit(double amount, String description){
+    public void deposit(double amount, String description) {
         Entry entry = this.getEntry(amount, description);
         this.addEntry(entry);
     };
 
-
-    public void withdraw(double amount, String description){
+    public void withdraw(double amount, String description) {
         Entry entry = this.getEntry(-amount, description);
         this.addEntry(entry);
     };

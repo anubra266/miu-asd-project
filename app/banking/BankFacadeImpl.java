@@ -10,22 +10,23 @@ import app.framework.exceptions.AccountNotFoundException;
 
 import java.time.LocalDate;
 
-public class BankFacadeImpl extends Subject implements BankFacade{
+public class BankFacadeImpl extends Subject implements BankFacade {
 
     private static BankFacadeImpl instance = new BankFacadeImpl();
     private BankAccountDAO bankAccountDatabase;
-    PercentageStrategy percentageStrategy ;
+    PercentageStrategy percentageStrategy;
 
-    private BankFacadeImpl(){
+    private BankFacadeImpl() {
         this.bankAccountDatabase = BankAccountDAO.getInstance();
     };
 
-    public static BankFacadeImpl getInstance(){
+    public static BankFacadeImpl getInstance() {
         return BankFacadeImpl.instance;
     }
 
     @Override
-    public void createPersonalAccount(String accNr, String name, String street, String city, String state, String zip, LocalDate birthDate, String email,String accountType) throws AccountAlreadyExistsException {
+    public void createPersonalAccount(String accNr, String name, String street, String city, String state, String zip,
+            LocalDate birthDate, String email, String accountType) throws AccountAlreadyExistsException {
         if (bankAccountDatabase.isUnique(accNr)) {
             if (accountType.equals("checking")) {
                 percentageStrategy = new CheckingPercentageStrategy();
@@ -44,8 +45,9 @@ public class BankFacadeImpl extends Subject implements BankFacade{
     }
 
     @Override
-    public void createCompanyAccount(String accNr, String name, String street, String city, String state, String zip, int numberOfEmployee, String email,String accountType) throws AccountAlreadyExistsException {
-        if (accountType.equals("checking")) {
+    public void createCompanyAccount(String accNr, String name, String street, String city, String state, String zip,
+            int numberOfEmployee, String email, String accountType) throws AccountAlreadyExistsException {
+        if (bankAccountDatabase.isUnique(accNr)) {
             if (accountType.equals("checking")) {
                 percentageStrategy = new CheckingPercentageStrategy();
             } else {
@@ -63,32 +65,32 @@ public class BankFacadeImpl extends Subject implements BankFacade{
     }
 
     @Override
-    public void withDraw(String accNumber,double amount) throws AccountNotFoundException {
+    public void withDraw(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
-        if(bankAccount != null) {
+        if (bankAccount != null) {
             bankAccount.withdraw(amount, "Amount withdraw");
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
             return;
         }
 
-        throw new AccountNotFoundException("Account with number "+ accNumber + " does not exist");
+        throw new AccountNotFoundException("Account with number " + accNumber + " does not exist");
     }
 
     @Override
-    public void deposit(String accNumber,double amount) throws AccountNotFoundException {
+    public void deposit(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
-        if(bankAccount != null) {
+        if (bankAccount != null) {
             bankAccount.deposit(amount, "Amount deposit");
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
             return;
         }
-        throw new AccountNotFoundException("Account with number "+ accNumber + " does not exist");
+        throw new AccountNotFoundException("Account with number " + accNumber + " does not exist");
     }
 
     @Override
     public void addInterest(String accNumber) {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
-        if(bankAccount != null) {
+        if (bankAccount != null) {
             bankAccount.addInterest();
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
         }
@@ -96,8 +98,8 @@ public class BankFacadeImpl extends Subject implements BankFacade{
 
     @Override
     public void alert(Event event, Object obj) {
-        for(Observer o: this.getObserverList()){
-            o.callback(event,obj);
+        for (Observer o : this.getObserverList()) {
+            o.callback(event, obj);
         }
     }
 }
