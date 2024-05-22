@@ -52,4 +52,8 @@ public abstract class Account {
     public abstract void withdraw(double amount, String description);
 
     public abstract Entry getInterestEntry(double amount);
+
+    public List<Entry> getEntryList() {
+        return entryList;
+    }
 }
