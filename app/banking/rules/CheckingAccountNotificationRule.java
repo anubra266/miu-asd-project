@@ -3,12 +3,9 @@
  * Date:2024.05.21
  * Time:14:42
  */
-
 package app.banking.rules;
 
-import app.banking.observers.BankEmailSender;
 import app.framework.*;
-import app.framework.exceptions.InsufficientBalanceException;
 
 public class CheckingAccountNotificationRule implements TransactionRule {
 
