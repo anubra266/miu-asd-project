@@ -1,5 +1,6 @@
 package app.banking;
 
+import app.framework.Event;
 import app.framework.Observer;
 import app.framework.Subject;
 
@@ -41,9 +42,9 @@ public class BankFacadeImpl extends Subject implements BankFacade{
     }
 
     @Override
-    public void alert() {
+    public void alert(Event event, Object obj) {
         for(Observer o: this.getObserverList()){
-            o.callback(null);
+            o.callback(event,obj);
         }
     }
 }

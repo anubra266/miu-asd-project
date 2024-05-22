@@ -19,6 +19,4 @@ public abstract class Subject implements Observable{
     public List<Observer> getObserverList() {
         return this.observerList;
     }
-
-    public abstract void alert();
 }

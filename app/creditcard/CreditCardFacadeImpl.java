@@ -1,5 +1,6 @@
 package app.creditcard;
 
+import app.framework.Event;
 import app.framework.Observer;
 import app.framework.Subject;
 
@@ -36,9 +37,10 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade{
     }
 
     @Override
-    public void alert() {
+    public void alert(Event event, Object obj) {
         for(Observer o: this.getObserverList()){
-            o.callback(null);
+            o.callback(event,obj);
         }
     }
+
 }
