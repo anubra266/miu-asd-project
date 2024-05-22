@@ -1,4 +1,4 @@
-package app.framework;
+package app.framework.domain;
 
 public interface Observable {
     void register(Observer ob);

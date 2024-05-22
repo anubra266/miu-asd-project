@@ -1,7 +1,7 @@
 package app.banking.customer;
 
-import app.framework.Address;
-import app.framework.Customer;
+import app.framework.domain.Address;
+import app.framework.domain.Customer;
 
 public class Organization extends Customer {
     private final long numberOfEmployees;

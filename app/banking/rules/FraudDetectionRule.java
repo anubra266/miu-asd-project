@@ -6,7 +6,10 @@
 
 package app.banking.rules;
 
-import app.framework.*;
+import app.framework.domain.Account;
+import app.framework.domain.Entry;
+import app.framework.domain.Event;
+import app.framework.domain.Observable;
 import app.framework.exceptions.FraudTransactionException;
 
 import java.time.Duration;

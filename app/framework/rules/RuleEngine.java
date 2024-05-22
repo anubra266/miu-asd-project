@@ -1,20 +1,18 @@
 /**
  * Author: Bayarjargal Jargalsaikhan
  * Date:2024.05.22
- * Time:11:21
+ * Time:12:54
  */
 
-package app.banking.rules;
+package app.framework.rules;
 
-import app.framework.Account;
-import app.framework.Entry;
-import app.framework.Rule;
+import app.framework.domain.Account;
+import app.framework.domain.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionRuleEngine {
-
+public class RuleEngine {
     private List<Rule> rules = new ArrayList<>();
 
     public void addRule(Rule rule) {
@@ -40,6 +38,5 @@ public class TransactionRuleEngine {
                 .forEach(r -> r.apply(account, entry));
         System.out.println("==== Applied rules ====");
     }
-
 
 }

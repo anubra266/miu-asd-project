@@ -1,8 +1,8 @@
 package app.banking.observers;
 
-import app.framework.Event;
-import app.framework.Observable;
-import app.framework.Observer;
+import app.framework.domain.Event;
+import app.framework.domain.Observable;
+import app.framework.domain.Observer;
 
 public class BankEmailSender implements Observer {
     private static BankEmailSender instance = new BankEmailSender();

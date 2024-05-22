@@ -1,4 +1,4 @@
-package app.framework;
+package app.framework.domain;
 
 public class Customer {
     private final String name;
