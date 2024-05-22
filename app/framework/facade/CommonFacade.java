@@ -7,9 +7,8 @@
 package app.framework.facade;
 
 import java.util.Collection;
-import java.util.List;
 
-public interface CommonFacade<R, I>{
+public interface CommonFacade<R, I> {
     R create(I i, R r);
 
     R update(I id, R r);
@@ -19,6 +18,5 @@ public interface CommonFacade<R, I>{
     Collection<R> findAll();
 
     long count();
-
 
 }

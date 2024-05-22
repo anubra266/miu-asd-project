@@ -1,7 +1,5 @@
 package app.ui.bank;
 
-
-
 /*
 		A basic implementation of the JDialog class.
 */
@@ -180,7 +178,8 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 		String email = JTextField_EM.getText();
 
 		// Check if any required field is empty
-		if (accNr.isEmpty() || name.isEmpty() || street.isEmpty() || city.isEmpty() || zip.isEmpty() || state.isEmpty() || birthDateString.isEmpty() || email.isEmpty()) {
+		if (accNr.isEmpty() || name.isEmpty() || street.isEmpty() || city.isEmpty() || zip.isEmpty() || state.isEmpty()
+				|| birthDateString.isEmpty() || email.isEmpty()) {
 			System.err.println("Please fill in all fields.");
 			return;
 		}
@@ -195,16 +194,17 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 		}
 
 		// Call the createPersonalAccount method of the bankService
-		try{
-			bankService.createPersonalAccount(accNr, name, street, city, state, zip, birthDate, email, JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING);
-		}catch( AccountCreationException ex){
+		try {
+			bankService.createAccount(accNr, name, street, city, state, zip, email,
+					JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING, birthDate);
+		} catch (AccountCreationException ex) {
 
 		}
 
 	}
 
-	void JButtonCalcel_actionPerformed (java.awt.event.ActionEvent event){
-			// make this frame invisible if Cancel button is clicked
-			dispose();
-		}
+	void JButtonCalcel_actionPerformed(java.awt.event.ActionEvent event) {
+		// make this frame invisible if Cancel button is clicked
+		dispose();
 	}
+}

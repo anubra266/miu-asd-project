@@ -16,6 +16,8 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     private static CreditCardFacadeImpl instance = new CreditCardFacadeImpl();
     private CreditAccountDAO creditCardDatabase;
+    PercentageStrategy percentageStrategy;
+    PercentageStrategy minimumPaymentStrategy;
 
     private CreditCardFacadeImpl() {
         this.creditCardDatabase = CreditAccountDAO.getInstance();
@@ -34,8 +36,6 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
             Customer customer = new Customer(name, email, address);
             CreditAccount account = new CreditAccount(ccNumber, customer, exprDate);
 
-            PercentageStrategy percentageStrategy;
-            PercentageStrategy minimumPaymentStrategy;
             switch (type) {
                 case GOLD:
                     percentageStrategy = new GoldMonthlyInterestPercentageStrategy();

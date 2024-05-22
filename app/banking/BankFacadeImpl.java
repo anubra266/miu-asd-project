@@ -1,16 +1,12 @@
 package app.banking;
 
-import app.banking.customer.Individual;
-import app.banking.customer.Organization;
 import app.banking.strategies.CheckingPercentageStrategy;
 import app.banking.strategies.SavingPercentageStrategy;
 import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 
-import java.time.LocalDate;
-
-public class BankFacadeImpl extends Subject implements BankFacade {
+public class BankFacadeImpl extends BankFacade {
 
     private static BankFacadeImpl instance = new BankFacadeImpl();
     private BankAccountDAO bankAccountDatabase;
@@ -24,8 +20,9 @@ public class BankFacadeImpl extends Subject implements BankFacade {
         return BankFacadeImpl.instance;
     }
 
-    @Override
-    public void createPersonalAccount(String accNr, String name, String street, String city, String state, String zip, LocalDate birthDate, String email,AccountType accountType) throws AccountCreationException {
+    public void createAccount(Customer customer, String accNr, AccountType accountType)
+            throws AccountCreationException {
+
         if (bankAccountDatabase.isUnique(accNr)) {
             if (accountType.equals(AccountType.CHECKING)) {
                 percentageStrategy = new CheckingPercentageStrategy();
@@ -33,35 +30,13 @@ public class BankFacadeImpl extends Subject implements BankFacade {
                 percentageStrategy = new SavingPercentageStrategy();
             }
 
-            Address address = new Address(street, state, city, zip);
-            Customer customer = new Individual(name, email, address, birthDate);
             BankAccount account = new BankAccount(accNr, customer);
             account.setPercentageStrategy(percentageStrategy);
             bankAccountDatabase.save(accNr, account);
             return;
         }
         throw new AccountCreationException("Account with number " + accNr + " already exists");
-    }
 
-    @Override
-    public void createCompanyAccount(String accNr, String name, String street, String city, String state, String zip, int numberOfEmployee, String email,AccountType accountType) throws AccountCreationException {
-        if (bankAccountDatabase.isUnique(accNr)) {
-            PercentageStrategy percentageStrategy;
-
-            if (accountType.equals(AccountType.CHECKING)) {
-                percentageStrategy = new CheckingPercentageStrategy();
-            } else {
-                percentageStrategy = new SavingPercentageStrategy();
-            }
-
-            Address address = new Address(street, state, city, zip);
-            Customer customer = new Organization(name, email, address, numberOfEmployee);
-            BankAccount account = new BankAccount(accNr, customer);
-            account.setPercentageStrategy(percentageStrategy);
-            bankAccountDatabase.save(accNr, account);
-            return;
-        }
-        throw new AccountCreationException("Account with number " + accNr + " already exists");
     }
 
     @Override
