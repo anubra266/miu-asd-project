@@ -14,5 +14,9 @@ public class CreditAccount extends Account {
     @Override
     public Entry getEntry(double amount,String description) {
         return new CreditCardEntry(amount, description, LocalDateTime.now());
+
+    @Override
+    public Entry getInterestEntry(double amount) {
+        return new CreditCardEntry(amount, "interest", LocalDate.now());
     }
 }

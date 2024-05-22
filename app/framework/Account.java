@@ -2,6 +2,9 @@ package app.framework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.stream.Collectors;
 
 public abstract class Account {
     private final String accNumber;
@@ -14,12 +17,12 @@ public abstract class Account {
         this.customer = customer;
     }
 
-    public void addEntry(Entry entry){
+    public void addEntry(Entry entry) {
         this.entryList.add(entry);
     }
 
-    public void setPercentageStrategy(PercentageStrategy strategy){
-        this. percentageStrategy = strategy;
+    public void setPercentageStrategy(PercentageStrategy strategy) {
+        this.percentageStrategy = strategy;
     }
 
     public String getAccNumber() {
@@ -28,6 +31,21 @@ public abstract class Account {
 
     public Customer getCustomer() {
         return this.customer;
+    }
+
+    private List<Entry> getCurrentMonthEntries() {
+        LocalDateTime now = LocalDateTime.now();
+        YearMonth currentMonth = YearMonth.from(now);
+
+        return entryList.stream()
+                .filter(entry -> YearMonth.from(entry.getDate()).equals(currentMonth))
+                .collect(Collectors.toList());
+    }
+
+    public double calculateCurrentMonthEntriesBalance() {
+        return getCurrentMonthEntries().stream()
+                .mapToDouble(Entry::getAmount)
+                .sum();
     }
 
     public double getBalance() {
@@ -44,10 +62,12 @@ public abstract class Account {
         this.addEntry(entry);
     }
 
+
     public void deposit(double amount, String description){
         Entry entry = this.getEntry(amount, description);
         this.addEntry(entry);
     };
+
 
     public void withdraw(double amount, String description){
         Entry entry = this.getEntry(-amount, description);
@@ -57,6 +77,6 @@ public abstract class Account {
     public abstract Entry getEntry(double amount, String description);
 
     public List<Entry> getEntryList() {
-        return entryList;
+        return this.entryList;
     }
 }
