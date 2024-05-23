@@ -8,6 +8,7 @@ import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.facade.CommonBankFacadeImpl;
+import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 import app.framework.rules.RuleEngine;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 abstract class BankFacade extends CommonBankFacadeImpl<BankAccount, BankEntry,String> {
 
-    public BankFacade(Database<BankAccount,String> database, RuleEngine<BankAccount,BankEntry> ruleEngine, List<Observer> list) {
+    public BankFacade(DAO<BankAccount,String> database, RuleEngine<BankAccount,BankEntry> ruleEngine, List<Observer> list) {
         super(database, ruleEngine, list);
     }
 

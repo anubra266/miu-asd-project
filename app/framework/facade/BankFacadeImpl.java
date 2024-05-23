@@ -1,5 +1,6 @@
 package app.framework.facade;
 import app.framework.domain.Account;
+import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 import app.framework.rules.BankRuleEngine;
 import app.framework.rules.RuleEngine;
@@ -9,7 +10,7 @@ public class BankFacadeImpl extends CommonFacadeImpl<Account,String> implements 
 
     RuleEngine<Account,Double> ruleEngine;
 
-    public BankFacadeImpl(Database<Account,String> database, BankRuleEngine ruleEngine) {
+    public BankFacadeImpl(DAO<Account,String> database, BankRuleEngine ruleEngine) {
         super(database);
         this.ruleEngine = ruleEngine;
     }
