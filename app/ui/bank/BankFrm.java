@@ -68,7 +68,6 @@ public class BankFrm extends javax.swing.JFrame {
 	 * init variables in the object
 	 ****/
 	String accountnr, clientName, street, city, zip, state, accountType, clientType, amountDeposit;
-	boolean newaccount;
 	private DefaultTableModel model;
 	private JTable JTable1;
 
@@ -116,7 +115,6 @@ public class BankFrm extends javax.swing.JFrame {
 		model.addColumn("Ch/S");
 		model.addColumn("Amount");
 		rowdata = new Object[8];
-		newaccount = false;
 
 		this.populateTable();
 
