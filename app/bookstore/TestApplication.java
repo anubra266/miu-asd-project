@@ -35,7 +35,6 @@ public class TestApplication {
         ruleEngine.addRule(new LoyalCustomerDiscountRule());
         
         DAO<BookStoreAccount, String> accountDAO = new DAO<>("book-store-accounts.store");
-
         DAO<Book, String> bookDAO = new DAO<>("books.store");
 
         AccountFacade facade = new AccountFacadeImpl(accountDAO);

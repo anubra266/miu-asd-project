@@ -7,21 +7,18 @@
 package app.framework.facade;
 
 import app.framework.domain.*;
-import app.framework.persistence.Database;
+import app.framework.persistence.DAO;
 import app.framework.rules.RuleEngine;
 
 import java.util.List;
 
 public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I> extends CommonFacadeImpl<R,I> implements CommonBankFacade<R, T, I>, Observable {
 
-    Database<R, I> database;
     RuleEngine ruleEngine;
-
     List<Observer> observers;
 
-    public CommonBankFacadeImpl(Database<R, I> database, RuleEngine ruleEngine, List<Observer> observers) {
+    public CommonBankFacadeImpl(DAO<R, I> database, RuleEngine ruleEngine, List<Observer> observers) {
         super(database);
-        this.database = database;
         this.ruleEngine = ruleEngine;
         this.observers = observers;
         observers.stream().forEach(e -> e.subscribe(this));
