@@ -1,5 +1,6 @@
-package app.banking;
+package app.banking.persistence;
 
+import app.banking.domain.BankAccount;
 import app.framework.persistence.DAO;
 
 public class BankAccountDAO extends DAO<BankAccount, String> {

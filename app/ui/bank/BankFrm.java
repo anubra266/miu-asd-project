@@ -1,11 +1,11 @@
 package app.ui.bank;
 
 import java.awt.*;
+import java.util.Collection;
 import javax.swing.table.DefaultTableModel;
 
-import app.banking.BankAccount;
+import app.banking.domain.BankAccount;
 import app.banking.BankFacadeImpl;
-import java.util.Collection;
 import javax.swing.*;
 
 /**

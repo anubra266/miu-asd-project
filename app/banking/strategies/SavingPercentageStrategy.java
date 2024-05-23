@@ -26,6 +26,6 @@ public class SavingPercentageStrategy implements PercentageStrategy {
     }
 
     public String getName() {
-        return "SAVINGS";
+        return "SAVING";
     }
 }

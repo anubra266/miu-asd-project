@@ -11,11 +11,17 @@ public class Entry  implements Serializable {
     private LocalDateTime date;
     private double amount;
     private String description;
+    private Event event;
 
-    public Entry(double amount, LocalDateTime date, String description) {
+    public Entry(double amount, LocalDateTime date, String description, Event event) {
         this.amount = amount;
         this.date = date;
         this.description = description;
+        this.event = event;
+    }
+
+    public Event getEvent() {
+        return this.event;
     }
 
     public String getDescription() {

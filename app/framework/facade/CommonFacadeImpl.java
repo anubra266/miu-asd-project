@@ -18,6 +18,10 @@ public abstract class CommonFacadeImpl<R, I> implements CommonFacade<R, I> {
         this.database = database;
     }
 
+    public Database<R, I> getDatabase() {
+        return this.database;
+    }
+
     @Override
     public R create(I i, R r) {
         database.save(i, r);

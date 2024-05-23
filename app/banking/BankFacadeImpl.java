@@ -1,13 +1,15 @@
 package app.banking;
 
+import app.banking.domain.BankAccount;
+import app.banking.persistence.BankAccountDAO;
 import app.banking.strategies.CheckingPercentageStrategy;
 import app.banking.strategies.SavingPercentageStrategy;
 import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.InsufficientBalanceException;
-
 import java.util.Collection;
+
 
 public class BankFacadeImpl extends BankFacade {
 
@@ -22,7 +24,10 @@ public class BankFacadeImpl extends BankFacade {
     PercentageStrategy percentageStrategy;;
 
     private BankFacadeImpl() {
+
+        // persistence layer setup
         this.bankAccountDatabase = BankAccountDAO.getInstance();
+
     }
 
     public void createAccount(Customer customer, String accNr, AccountType accountType)
@@ -82,10 +87,4 @@ public class BankFacadeImpl extends BankFacade {
         return this.bankAccountDatabase.getAll();
     }
 
-    @Override
-    public void alert(Event event, Object obj) {
-        for (Observer o : this.getObserverList()) {
-            o.callback(event, obj);
-        }
-    }
 }

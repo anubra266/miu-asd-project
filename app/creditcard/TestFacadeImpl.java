@@ -6,8 +6,8 @@
 
 package app.creditcard;
 
-import app.banking.BankAccount;
-import app.banking.BankEntry;
+import app.banking.domain.BankAccount;
+import app.banking.domain.BankEntry;
 import app.framework.domain.Observer;
 import app.framework.facade.CommonBankFacadeImpl;
 import app.framework.persistence.Database;

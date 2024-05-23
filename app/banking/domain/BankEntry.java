@@ -1,4 +1,4 @@
-package app.banking;
+package app.banking.domain;
 
 import app.framework.domain.Entry;
 import java.time.LocalDateTime;

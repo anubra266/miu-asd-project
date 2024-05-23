@@ -9,7 +9,7 @@ package app.framework.facade;
 import java.util.Collection;
 
 public interface CommonFacade<R, I> {
-    R create(I i, R r);
+    R create(I id, R r);
 
     R update(I id, R r);
 

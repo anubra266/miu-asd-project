@@ -6,9 +6,9 @@
 
 package app.creditcard;
 
-import app.banking.BankAccount;
-import app.banking.BankAccountDAO;
-import app.banking.BankEntry;
+import app.banking.domain.BankAccount;
+import app.banking.persistence.BankAccountDAO;
+import app.banking.domain.BankEntry;
 import app.framework.domain.Address;
 import app.framework.domain.Customer;
 import app.framework.persistence.DAO;

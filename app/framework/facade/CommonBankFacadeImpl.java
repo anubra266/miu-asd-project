@@ -14,14 +14,12 @@ import java.util.List;
 
 public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I> extends CommonFacadeImpl<R,I> implements CommonBankFacade<R, T, I>, Observable {
 
-    Database<R, I> database;
     RuleEngine ruleEngine;
 
     List<Observer> observers;
 
     public CommonBankFacadeImpl(Database<R, I> database, RuleEngine ruleEngine, List<Observer> observers) {
         super(database);
-        this.database = database;
         this.ruleEngine = ruleEngine;
         this.observers = observers;
         observers.stream().forEach(e -> e.subscribe(this));
@@ -33,7 +31,7 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
         try {
             this.ruleEngine.process(r, t);
             r.deposit(t.getAmount(), t.getDescription());
-            database.update((I) r.getAccNumber(), r);
+            this.getDatabase().update((I) r.getAccNumber(), r);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,20 +42,20 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
         try {
             this.ruleEngine.process(r, t);
             r.withdraw(t.getAmount(), t.getDescription());
-            database.update((I) r.getAccNumber(), r);
+            this.getDatabase().update((I) r.getAccNumber(), r);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public R update(I id, R r) {
-        database.update((I) r.getAccNumber(), r);
+        this.getDatabase().update((I) r.getAccNumber(), r);
         return r;
     }
 
     @Override
     public void addInterest() {
-        database.getAll().forEach(Account::addInterest);
+        this.getDatabase().getAll().forEach(Account::addInterest);
     }
 
     @Override
