@@ -1,7 +1,10 @@
 package app.ui.ccard;
 
 import app.creditcard.CreditCardFacadeImpl;
+import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.CreditInvalidDepositException;
+
+import javax.swing.*;
 
 public class JDialog_Deposit extends javax.swing.JDialog {
 
@@ -76,25 +79,32 @@ public class JDialog_Deposit extends javax.swing.JDialog {
 	}
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-//		parentframe.amountDeposit = JTextField_Deposit.getText();
-//		dispose();
+
+		parentframe.amountDeposit = JTextField_Deposit.getText();
+
+		String accNumber = JTextField_NAME.getText();
+
 		String amountDepositStr = JTextField_Deposit.getText();
 
-		// Convert the amount string to a double
-		double amountDeposit = Double.parseDouble(amountDepositStr);
+		if(amountDepositStr.isBlank()){
+			JOptionPane.showMessageDialog(this, "Not a valid amount");
+			return;
+		}
 
 		// Update the parent frame with the deposit amount as a string
 		parentframe.amountDeposit = amountDepositStr;
 
 		// Call the deposit method on the creditCardService with the deposit amount
 		try{
-			this.creditCardService.deposit(amountDeposit,"dsfd");
-		}catch(CreditInvalidDepositException ex){
-
+			// Convert the amount string to a double
+			double amountDeposit = Double.parseDouble(amountDepositStr);
+			this.creditCardService.deposit(accNumber, amountDeposit);
+			// Close the dialog
+			dispose();
+		}catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 
-		// Close the dialog
-		dispose();
 	}
 
 	void JButtonCalcel_actionPerformed(java.awt.event.ActionEvent event) {

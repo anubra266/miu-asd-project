@@ -83,10 +83,16 @@ public class JDialog_Deposit extends javax.swing.JDialog {
 
 		String accNumber = JTextField_NAME.getText();
 		String amountStr = JTextField_Deposit.getText();
-		double amount = Double.parseDouble(amountStr);
+
+		if(amountStr.isBlank()){
+			JOptionPane.showMessageDialog(this, "Not a valid amount");
+			return;
+		}
+
 		parentframe.amountDeposit = amountStr;
 
 		try {
+			double amount = Double.parseDouble(amountStr);
 			this.bankService.deposit(accNumber, amount);
 			dispose();
 		} catch (AccountNotFoundException ex) {

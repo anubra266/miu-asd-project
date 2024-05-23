@@ -80,6 +80,11 @@ public class JDialog_Withdraw extends javax.swing.JDialog {
 		String accNumber = JTextField_NAME.getText();
 		String amountStr = JTextField_AMT.getText();
 
+		if(amountStr.isBlank()){
+			JOptionPane.showMessageDialog(this, "Not a valid amount");
+			return;
+		}
+
 		parentframe.amountDeposit = amountStr;
 
 		try {

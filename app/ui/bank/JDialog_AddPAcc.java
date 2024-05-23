@@ -182,7 +182,8 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 
 		// Check if any required field is empty
 		if (accNr.isEmpty()) {
-			System.err.println("Please enter account number.");
+			System.err.println();
+			JOptionPane.showMessageDialog(this, "Account number cannot be empty");
 			return;
 		}
 

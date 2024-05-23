@@ -178,6 +178,12 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
 		String zip = JTextField_ZIP.getText();
 		String email = JTextField_EM.getText();
 
+		if (accNr.isEmpty()) {
+			System.err.println();
+			JOptionPane.showMessageDialog(this, "Account number cannot be empty");
+			return;
+		}
+
 		// Extract the number of employees if provided
 		String numOfEmpStr = JTextField_NoOfEmp.getText();
 		int numberOfEmployees = 0;

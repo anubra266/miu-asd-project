@@ -8,13 +8,15 @@ import app.creditcard.CreditCardFacadeImpl;
 import app.creditcard.CreditCardType;
 import app.framework.exceptions.AccountCreationException;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JOptionPane;
+import java.time.format.DateTimeParseException;
 
 public class JDialog_AddCCAccount extends javax.swing.JDialog {
 	private CardFrm parentframe;
 	CreditCardFacadeImpl creditCardService;
+
 
 	public JDialog_AddCCAccount(CardFrm parent) {
 		super(parent);
@@ -190,37 +192,48 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
 		parentframe.ccnumber = JTextField_CCNR.getText();
 		parentframe.expdate = JTextField_ExpDate.getText();
 
-		String name = JTextField_NAME.getText();
+		String name =  JTextField_NAME.getText();
 		String street = JTextField_STR.getText();
 		String city = JTextField_CT.getText();
 		String zip = JTextField_ZIP.getText();
-		String email = JTextField_Email.getText();
-		String state = JTextField_ST.getText();
-		String ccNumber = JTextField_CCNR.getText();
-		String expDateStr = JTextField_ExpDate.getText();
+		String email= JTextField_Email.getText();
+		String state= JTextField_ST.getText();
+		String  ccNumber= JTextField_CCNR.getText();
+		String expDateStr=  JTextField_ExpDate.getText();
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		LocalDate expDate = expDateStr.isEmpty() ? null : LocalDate.parse(expDateStr, formatter);
+		// Check if any required field is empty
+		if (ccNumber.isEmpty()) {
+			System.err.println();
+			JOptionPane.showMessageDialog(this, "Credit card number cannot be empty");
+			return;
+		}
+
+		LocalDate expDate = null;
+		if (!expDateStr.isEmpty()) {
+			try {
+				expDate = LocalDate.parse(expDateStr);
+			} catch (DateTimeParseException e) {
+				JOptionPane.showMessageDialog(this, "Invalid expiry date format. Please use yyyy-MM-dd.");
+				return;
+			}
+
+		}
 
 		CreditCardType type;
-		if (JRadioButton_Gold.isSelected()) {
+		if(JRadioButton_Gold.isSelected()){
 			type = CreditCardType.GOLD;
-		} else if (JRadioButton_Bronze.isSelected()) {
+		}else if(JRadioButton_Bronze.isSelected()){
 			type = CreditCardType.BRONZE;
-		} else {
+		}else{
 			type = CreditCardType.SILVER;
 		}
 
-		try {
-			this.creditCardService.createAccount(name, street, city, state, zip, email, ccNumber, expDate, type);
-			JOptionPane.showMessageDialog(this, "Credit " + type + "Card Account created Successfully!!!");
-			dispose();
-		} catch (AccountCreationException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage());
+		try{
+			this.creditCardService.createAccount(name,  street,  city,  state,  zip,  email,  ccNumber,  expDate, type);
+		}catch(AccountCreationException ex){
 
 		}
 
-		parentframe.newaccount = true;
 		dispose();
 	}
 
