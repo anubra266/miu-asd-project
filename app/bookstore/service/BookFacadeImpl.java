@@ -8,11 +8,12 @@ package app.bookstore.service;
 
 import app.bookstore.domain.Book;
 import app.framework.facade.CommonFacadeImpl;
+import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 
 public class BookFacadeImpl extends CommonFacadeImpl<Book, String> implements BookFacade{
 
-    public BookFacadeImpl(Database<Book, String> database) {
+    public BookFacadeImpl(DAO<Book, String> database) {
         super(database);
     }
 }
