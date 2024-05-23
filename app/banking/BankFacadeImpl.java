@@ -1,6 +1,7 @@
 package app.banking;
 
 import app.banking.domain.BankAccount;
+import app.banking.observers.BankEmailSender;
 import app.banking.persistence.BankAccountDAO;
 import app.banking.strategies.CheckingPercentageStrategy;
 import app.banking.strategies.SavingPercentageStrategy;
@@ -8,6 +9,8 @@ import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.InsufficientBalanceException;
+
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -27,6 +30,7 @@ public class BankFacadeImpl extends BankFacade {
 
         // persistence layer setup
         this.bankAccountDatabase = BankAccountDAO.getInstance();
+        BankEmailSender.getInstance().subscribe(this);
 
     }
 
@@ -52,7 +56,18 @@ public class BankFacadeImpl extends BankFacade {
     @Override
     public void withDraw(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
+
         if (bankAccount != null) {
+            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
+                this.alert(Event.WITHDRAW,bankAccount);
+            }else{
+                if(bankAccount.getBalance() < amount){
+                    this.alert(Event.INSUFFICIENT_FUND,bankAccount);
+                }else if(amount > 500){
+                    this.alert(Event.WITHDRAW,bankAccount);
+                }
+            }
+
             if (bankAccount.getBalance() < amount) {
                 throw new InsufficientBalanceException(
                         "Account with number " + accNumber + " does not have enough balance");
@@ -68,8 +83,17 @@ public class BankFacadeImpl extends BankFacade {
     public void deposit(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = bankAccountDatabase.get(accNumber);
         if (bankAccount != null) {
+            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
+                this.alert(Event.DEPOSIT,bankAccount);
+            }else{
+                if(amount > 500){
+                    this.alert(Event.DEPOSIT,bankAccount);
+                }
+            }
+
             bankAccount.deposit(amount, "Amount deposit");
             bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
+
             return;
         }
         throw new AccountNotFoundException("Account with number " + accNumber + " does not exist");
@@ -87,4 +111,10 @@ public class BankFacadeImpl extends BankFacade {
         return this.bankAccountDatabase.getAll();
     }
 
+    @Override
+    public void alert(Event event, Object obj) {
+        for (Observer o : this.getObserverList()) {
+            o.callback(event, obj);
+        }
+    }
 }

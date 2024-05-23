@@ -5,12 +5,13 @@ import app.banking.customer.Company;
 import app.framework.domain.AccountType;
 import app.framework.domain.Address;
 import app.framework.domain.Customer;
+import app.framework.domain.Subject;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 
 import java.time.LocalDate;
 
-abstract class BankFacade {
+abstract class BankFacade extends Subject {
 
     public void createAccount(String accNr, String name, String street, String city, String state, String zip,
                               String email, AccountType accountType, LocalDate birthDate) throws AccountCreationException {

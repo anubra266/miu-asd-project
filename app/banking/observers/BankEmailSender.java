@@ -1,5 +1,6 @@
 package app.banking.observers;
 
+import app.banking.domain.BankAccount;
 import app.framework.domain.Event;
 import app.framework.domain.Observable;
 import app.framework.domain.Observer;
@@ -25,6 +26,7 @@ public class BankEmailSender implements Observer {
 
     @Override
     public void callback(Event event, Object ob) {
-        System.out.println("Bank Account Transaction");
+        BankAccount acc = (BankAccount) ob;
+        System.out.println("Event: "+ event +",Account: "+ acc.getCustomer().getCustomerType()  + ", Email: " + acc.getCustomer().getEmail());
     }
 }
