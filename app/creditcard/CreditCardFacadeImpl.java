@@ -1,5 +1,6 @@
 package app.creditcard;
 
+import app.creditcard.observers.CreditCardEmailSender;
 import app.creditcard.strategies.*;
 import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
@@ -21,6 +22,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     private CreditCardFacadeImpl() {
         this.creditCardDatabase = CreditAccountDAO.getInstance();
+        CreditCardEmailSender.getInstance().subscribe(this);
     };
 
     public static CreditCardFacadeImpl getInstance() {
@@ -86,9 +88,11 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
     @Override
     public void chargeAmount(String ccNumber, double amount) {
         CreditAccount account = this.creditCardDatabase.get(ccNumber);
+        if(amount > 400){
+            this.alert(Event.CHARGE, account);
+        }
         account.withdraw(amount, "charge");
         this.creditCardDatabase.save(ccNumber, account);
-        this.alert(Event.CHARGE, account);
     }
 
     @Override
@@ -99,7 +103,6 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         }
         account.deposit(amount, "deposit");
         this.creditCardDatabase.save(ccNumber, account);
-        this.alert(Event.DEPOSIT, account);
     }
 
     public Collection<CreditAccount> getAccounts() {

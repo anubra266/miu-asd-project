@@ -27,6 +27,6 @@ public class BankEmailSender implements Observer {
     @Override
     public void callback(Event event, Object ob) {
         BankAccount acc = (BankAccount) ob;
-        System.out.println("Event: "+ event +",Account: "+ acc.getCustomer().getCustomerType()  + ", Email: " + acc.getCustomer().getEmail());
+        System.out.println("[EMAIL]: Event: "+ event +",Account: "+ acc.getCustomer().getCustomerType()  + ", Email: " + acc.getCustomer().getEmail());
     }
 }

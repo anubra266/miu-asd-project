@@ -9,8 +9,6 @@ import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.InsufficientBalanceException;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 
