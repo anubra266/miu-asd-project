@@ -9,8 +9,9 @@ import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.InsufficientBalanceException;
+
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 
 public class BankFacadeImpl extends BankFacade {
@@ -22,7 +23,12 @@ public class BankFacadeImpl extends BankFacade {
     }
 
     private BankFacadeImpl() {
-        super(BankAccountDAO.getInstance(),null, List.of(BankEmailSender.getInstance()));
+
+        super(BankAccountDAO.getInstance(),null, new ArrayList<Observer>(){
+            {
+                add(BankEmailSender.getInstance());
+            }
+        });
     }
 
     public void createAccount(Customer customer, String accNr, AccountType accountType)
