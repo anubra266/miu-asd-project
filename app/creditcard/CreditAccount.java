@@ -27,4 +27,8 @@ public class CreditAccount extends Account {
     public Entry getEntry(double amount, String description, Event event) {
         return new CreditCardEntry(amount, description, LocalDateTime.now(),event);
     }
+
+    public LocalDate getExprDate() {
+        return this.exprDate;
+    }
 }

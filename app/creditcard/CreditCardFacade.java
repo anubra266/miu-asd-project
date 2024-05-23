@@ -13,7 +13,7 @@ public interface CreditCardFacade {
 
     Collection<String> generateMonthlyBill();
 
-    void chargeAmount(double amount, String ccNumber);
+    void chargeAmount( String ccNumber, double amount);
 
-    void deposit(double amount, String ccNumber) throws CreditInvalidDepositException;
+    void deposit(String ccNumber, double amount) throws CreditInvalidDepositException;
 }

@@ -85,7 +85,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
     }
 
     @Override
-    public void chargeAmount(double amount, String ccNumber) {
+    public void chargeAmount(String ccNumber, double amount) {
         CreditAccount account = this.creditCardDatabase.get(ccNumber);
         account.withdraw(amount, "charge");
         this.creditCardDatabase.save(ccNumber, account);
@@ -93,7 +93,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
     }
 
     @Override
-    public void deposit(double amount, String ccNumber) throws CreditInvalidDepositException {
+    public void deposit(String ccNumber, double amount) throws CreditInvalidDepositException {
         CreditAccount account = this.creditCardDatabase.get(ccNumber);
         if (account.getBalance() >= 0 || account.getBalance() + amount > 0) {
             throw new CreditInvalidDepositException("Cannot deposit more than you owe");
@@ -101,6 +101,10 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
         account.deposit(amount, "deposit");
         this.creditCardDatabase.save(ccNumber, account);
         this.alert(Event.DEPOSIT, account);
+    }
+
+    public Collection<CreditAccount> getAccounts() {
+        return this.creditCardDatabase.getAll();
     }
 
     @Override
