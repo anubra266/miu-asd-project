@@ -15,7 +15,6 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
 	private CardFrm parentframe;
 	CreditCardFacadeImpl creditCardService;
 
-
 	public JDialog_AddCCAccount(CardFrm parent) {
 		super(parent);
 		parentframe = parent;
@@ -190,30 +189,30 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
 		parentframe.ccnumber = JTextField_CCNR.getText();
 		parentframe.expdate = JTextField_ExpDate.getText();
 
-		String name =  JTextField_NAME.getText();
+		String name = JTextField_NAME.getText();
 		String street = JTextField_STR.getText();
 		String city = JTextField_CT.getText();
 		String zip = JTextField_ZIP.getText();
-		String email= JTextField_Email.getText();
-		String state= JTextField_ST.getText();
-		String  ccNumber= JTextField_CCNR.getText();
-		String expDateStr=  JTextField_ExpDate.getText();
+		String email = JTextField_Email.getText();
+		String state = JTextField_ST.getText();
+		String ccNumber = JTextField_CCNR.getText();
+		String expDateStr = JTextField_ExpDate.getText();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		LocalDate expDate = LocalDate.parse(expDateStr, formatter);
+		LocalDate expDate = expDateStr.isEmpty() ? null : LocalDate.parse(expDateStr, formatter);
 
 		CreditCardType type;
-		if(JRadioButton_Gold.isSelected()){
+		if (JRadioButton_Gold.isSelected()) {
 			type = CreditCardType.GOLD;
-		}else if(JRadioButton_Bronze.isSelected()){
+		} else if (JRadioButton_Bronze.isSelected()) {
 			type = CreditCardType.BRONZE;
-		}else{
+		} else {
 			type = CreditCardType.SILVER;
 		}
 
-		try{
-			this.creditCardService.createAccount(name,  street,  city,  state,  zip,  email,  ccNumber,  expDate, type);
-		}catch(AccountCreationException ex){
+		try {
+			this.creditCardService.createAccount(name, street, city, state, zip, email, ccNumber, expDate, type);
+		} catch (AccountCreationException ex) {
 
 		}
 
