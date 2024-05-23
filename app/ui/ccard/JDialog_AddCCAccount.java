@@ -10,6 +10,7 @@ import app.framework.exceptions.AccountCreationException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 public class JDialog_AddCCAccount extends javax.swing.JDialog {
 	private CardFrm parentframe;
@@ -212,7 +213,10 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
 
 		try {
 			this.creditCardService.createAccount(name, street, city, state, zip, email, ccNumber, expDate, type);
+			JOptionPane.showMessageDialog(this, "Credit " + type + "Card Account created Successfully!!!");
+			dispose();
 		} catch (AccountCreationException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage());
 
 		}
 
