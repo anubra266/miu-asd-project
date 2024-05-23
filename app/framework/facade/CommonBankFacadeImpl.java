@@ -7,7 +7,7 @@
 package app.framework.facade;
 
 import app.framework.domain.*;
-import app.framework.persistence.Database;
+import app.framework.persistence.DAO;
 import app.framework.rules.RuleEngine;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
 
     List<Observer> observers = new ArrayList<>();
 
-    public CommonBankFacadeImpl(Database<R, I> database, RuleEngine<R,T> ruleEngine, List<Observer> observers) {
+    public CommonBankFacadeImpl(DAO<R, I> database, RuleEngine<R,T> ruleEngine, List<Observer> observers) {
         super(database);
         this.ruleEngine = ruleEngine;
         if(observers != null){

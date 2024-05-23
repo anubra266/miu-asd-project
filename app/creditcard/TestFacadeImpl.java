@@ -10,13 +10,13 @@ import app.banking.domain.BankAccount;
 import app.banking.domain.BankEntry;
 import app.framework.domain.Observer;
 import app.framework.facade.CommonBankFacadeImpl;
+import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 import app.framework.rules.RuleEngine;
-
 import java.util.List;
 
-public class TestFacadeImpl extends CommonBankFacadeImpl<BankAccount, BankEntry, String> implements TestFacade {
-    public TestFacadeImpl(Database<BankAccount, String> database, RuleEngine ruleEngine, List<Observer> observers) {
+public class TestFacadeImpl extends CommonBankFacadeImpl<CreditAccount, BankEntry, String> implements TestFacade {
+    public TestFacadeImpl(DAO<CreditAccount, String> database, RuleEngine<CreditAccount, CreditCardEntry> ruleEngine, List<Observer> observers) {
         super(database, ruleEngine, observers);
     }
 }

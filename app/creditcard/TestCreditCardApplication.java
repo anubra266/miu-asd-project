@@ -20,12 +20,15 @@ import java.util.ArrayList;
 
 public class TestCreditCardApplication {
     public static void main(String[] args) {
-        DAO< BankAccount, String> bankAccountDAO = BankAccountDAO.getInstance();
+        DAO<CreditAccount, String> bankAccountDAO = CreditAccountDAO.getInstance();
         RuleEngine ruleEngine = new RuleEngine();
         TestFacade facade = new TestFacadeImpl(bankAccountDAO, ruleEngine, new ArrayList<>());
+
         Customer customer = new Customer("Bayarjargal", "test@test.com", new Address("4th", "Fairfield", "IA", "52556"));
         BankAccount account = new BankAccount("132", customer);
         BankEntry entry = new BankEntry(100, "Deposit", LocalDateTime.now(),Event.DEPOSIT, "Test", "Test");
-        facade.withdraw(account, entry);
+        // facade.withdraw(account, entry);
+
+        facade.addInterest();
     }
 }

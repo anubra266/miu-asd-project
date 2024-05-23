@@ -6,15 +6,16 @@
 
 package app.framework.facade;
 
+import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 
 import java.util.Collection;
 
 public abstract class CommonFacadeImpl<R, I> implements CommonFacade<R, I> {
 
-    private Database<R, I> database;
+    protected DAO<R, I> database;
 
-    public CommonFacadeImpl(Database<R, I> database) {
+    public CommonFacadeImpl(DAO<R, I> database) {
         this.database = database;
     }
 
