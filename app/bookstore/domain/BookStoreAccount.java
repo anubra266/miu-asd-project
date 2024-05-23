@@ -9,6 +9,7 @@ package app.bookstore.domain;
 import app.framework.domain.Account;
 import app.framework.domain.Customer;
 import app.framework.domain.Entry;
+import app.framework.domain.Event;
 
 public class BookStoreAccount extends Account {
     public BookStoreAccount(String accNumber, Customer customer) {
@@ -21,7 +22,7 @@ public class BookStoreAccount extends Account {
     }
 
     @Override
-    public Entry getEntry(double amount, String description) {
+    public Entry getEntry(double amount, String description, Event event) {
         return null;
     }
 

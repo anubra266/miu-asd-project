@@ -11,6 +11,7 @@ import app.banking.persistence.BankAccountDAO;
 import app.banking.domain.BankEntry;
 import app.framework.domain.Address;
 import app.framework.domain.Customer;
+import app.framework.domain.Event;
 import app.framework.persistence.DAO;
 import app.framework.rules.RuleEngine;
 
@@ -24,7 +25,7 @@ public class TestCreditCardApplication {
         TestFacade facade = new TestFacadeImpl(bankAccountDAO, ruleEngine, new ArrayList<>());
         Customer customer = new Customer("Bayarjargal", "test@test.com", new Address("4th", "Fairfield", "IA", "52556"));
         BankAccount account = new BankAccount("132", customer);
-        BankEntry entry = new BankEntry(100, "Deposit", LocalDateTime.now(), "Test", "Test");
+        BankEntry entry = new BankEntry(100, "Deposit", LocalDateTime.now(),Event.DEPOSIT, "Test", "Test");
         facade.withdraw(account, entry);
     }
 }

@@ -1,9 +1,6 @@
 package app.creditcard;
 
-import app.framework.domain.Account;
-import app.framework.domain.Customer;
-import app.framework.domain.Entry;
-import app.framework.domain.PercentageStrategy;
+import app.framework.domain.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,7 +24,7 @@ public class CreditAccount extends Account {
     }
 
     @Override
-    public Entry getEntry(double amount, String description) {
-        return new CreditCardEntry(amount, description, LocalDateTime.now());
+    public Entry getEntry(double amount, String description, Event event) {
+        return new CreditCardEntry(amount, description, LocalDateTime.now(),event);
     }
 }

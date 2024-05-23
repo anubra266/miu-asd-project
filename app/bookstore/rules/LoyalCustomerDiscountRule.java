@@ -20,7 +20,7 @@ public class LoyalCustomerDiscountRule implements DiscountRule{
     public void apply(BookStoreAccount bookStoreAccount, PurchaseEntry purchaseEntry) {
         // TODO: Apply discount on the entry
 
-        PurchaseEntry discountedEntry = new PurchaseEntry(purchaseEntry.getAmount() - purchaseEntry.getAmount() * .1 , purchaseEntry.getDate(), purchaseEntry.getDescription()+ "Note: 10% off from loyal customers");
+        PurchaseEntry discountedEntry = new PurchaseEntry(purchaseEntry.getAmount() - purchaseEntry.getAmount() * .1 , purchaseEntry.getDate(), purchaseEntry.getDescription()+ "Note: 10% off from loyal customers",purchaseEntry.getEvent());
         bookStoreAccount.getEntryList().add(discountedEntry);
 
 

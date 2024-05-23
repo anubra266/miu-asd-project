@@ -80,21 +80,21 @@ public abstract class Account implements Serializable {
 
     public void addInterest() {
         double interest = this.percentageStrategy.getPercentAmount(getBalance());
-        Entry entry = this.getEntry(interest, "interest");
+        Entry entry = this.getEntry(interest, "interest", Event.DEPOSIT);
         this.addEntry(entry);
     }
 
     public void deposit(double amount, String description) {
-        Entry entry = this.getEntry(amount, description);
+        Entry entry = this.getEntry(amount, description, Event.DEPOSIT);
         this.addEntry(entry);
     };
 
     public void withdraw(double amount, String description) {
-        Entry entry = this.getEntry(-amount, description);
+        Entry entry = this.getEntry(-amount, description,Event.WITHDRAW);
         this.addEntry(entry);
     };
 
-    public abstract Entry getEntry(double amount, String description);
+    public abstract Entry getEntry(double amount, String description,Event event);
 
     public List<Entry> getEntryList() {
         return this.entryList;
