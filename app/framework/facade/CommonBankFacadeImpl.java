@@ -17,13 +17,15 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
 
     RuleEngine<R,T> ruleEngine;
 
-    List<Observer> observers;
+    List<Observer> observers = new ArrayList<>();
 
     public CommonBankFacadeImpl(Database<R, I> database, RuleEngine<R,T> ruleEngine, List<Observer> observers) {
         super(database);
         this.ruleEngine = ruleEngine;
-        this.observers = observers == null ? new ArrayList<>() : observers;
-        this.observers.stream().forEach(e -> e.subscribe(this));
+        if(observers != null){
+            observers.stream().forEach(e -> e.subscribe(this));
+        }
+
     }
 
     public RuleEngine<R, T> getRuleEngine() {

@@ -1,7 +1,5 @@
 package app.creditcard;
 
-import app.banking.domain.BankAccount;
-import app.banking.domain.BankEntry;
 import app.creditcard.observers.CreditCardEmailSender;
 import app.creditcard.strategies.*;
 import app.framework.domain.*;
@@ -13,8 +11,8 @@ import app.framework.exceptions.CreditInvalidDepositException;
 import app.framework.facade.CommonBankFacadeImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class CreditCardFacadeImpl extends CommonBankFacadeImpl<CreditAccount, CreditCardEntry,String> implements CreditCardFacade {
@@ -24,7 +22,11 @@ public class CreditCardFacadeImpl extends CommonBankFacadeImpl<CreditAccount, Cr
     PercentageStrategy minimumPaymentStrategy;
 
     private CreditCardFacadeImpl() {
-        super(CreditAccountDAO.getInstance(),null, List.of(CreditCardEmailSender.getInstance()));
+        super(CreditAccountDAO.getInstance(),null, new ArrayList<Observer>(){
+            {
+                add(CreditCardEmailSender.getInstance());
+            }
+        });
     };
 
     public static CreditCardFacadeImpl getInstance() {
