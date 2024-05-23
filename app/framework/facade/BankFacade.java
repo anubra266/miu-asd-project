@@ -1,6 +1,4 @@
-package app.banking.facade_future;
-
-import app.framework.facade.CommonFacade;
+package app.framework.facade;
 
 public interface BankFacade<R, T , I> extends CommonFacade<R,I> {
 

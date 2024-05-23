@@ -10,6 +10,7 @@ import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
 import app.framework.exceptions.InsufficientBalanceException;
 import java.util.Collection;
+import java.util.List;
 
 
 public class BankFacadeImpl extends BankFacade {
@@ -20,22 +21,15 @@ public class BankFacadeImpl extends BankFacade {
         return BankFacadeImpl.instance;
     }
 
-    private BankAccountDAO bankAccountDatabase;
-
-    PercentageStrategy percentageStrategy;;
-
     private BankFacadeImpl() {
-
-        // persistence layer setup
-        this.bankAccountDatabase = BankAccountDAO.getInstance();
-        BankEmailSender.getInstance().subscribe(this);
-
+        super(BankAccountDAO.getInstance(),null, List.of(BankEmailSender.getInstance()));
     }
 
     public void createAccount(Customer customer, String accNr, AccountType accountType)
             throws AccountCreationException {
+        PercentageStrategy percentageStrategy;
 
-        if (bankAccountDatabase.isUnique(accNr)) {
+        if (getDatabase().isUnique(accNr)) {
             if (accountType.equals(AccountType.CHECKING)) {
                 percentageStrategy = new CheckingPercentageStrategy();
             } else {
@@ -44,7 +38,7 @@ public class BankFacadeImpl extends BankFacade {
 
             BankAccount account = new BankAccount(accNr, customer);
             account.setPercentageStrategy(percentageStrategy);
-            bankAccountDatabase.save(accNr, account);
+            getDatabase().save(accNr, account);
             return;
         }
         throw new AccountCreationException("Account with number " + accNr + " already exists");
@@ -53,15 +47,16 @@ public class BankFacadeImpl extends BankFacade {
 
     @Override
     public void withDraw(String accNumber, double amount) throws AccountNotFoundException {
-        BankAccount bankAccount = bankAccountDatabase.get(accNumber);
+        BankAccount bankAccount = getDatabase().get(accNumber);
 
         if (bankAccount != null) {
+            if(bankAccount.getBalance() < amount){
+                this.alert(Event.INSUFFICIENT_FUND,bankAccount);
+            }
             if(bankAccount.getCustomer().getCustomerType().equals("Company")){
                 this.alert(Event.WITHDRAW,bankAccount);
             }else{
-                if(bankAccount.getBalance() < amount){
-                    this.alert(Event.INSUFFICIENT_FUND,bankAccount);
-                }else if(amount > 500){
+                if(amount > 500){
                     this.alert(Event.WITHDRAW,bankAccount);
                 }
             }
@@ -71,7 +66,7 @@ public class BankFacadeImpl extends BankFacade {
                         "Account with number " + accNumber + " does not have enough balance");
             }
             bankAccount.withdraw(amount, "Amount withdraw");
-            bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
+            getDatabase().update(bankAccount.getAccNumber(), bankAccount);
             return;
         }
         throw new AccountNotFoundException("Account with number " + accNumber + " does not exist");
@@ -79,7 +74,7 @@ public class BankFacadeImpl extends BankFacade {
 
     @Override
     public void deposit(String accNumber, double amount) throws AccountNotFoundException {
-        BankAccount bankAccount = bankAccountDatabase.get(accNumber);
+        BankAccount bankAccount = getDatabase().get(accNumber);
         if (bankAccount != null) {
             if(bankAccount.getCustomer().getCustomerType().equals("Company")){
                 this.alert(Event.DEPOSIT,bankAccount);
@@ -90,7 +85,7 @@ public class BankFacadeImpl extends BankFacade {
             }
 
             bankAccount.deposit(amount, "Amount deposit");
-            bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
+            getDatabase().update(bankAccount.getAccNumber(), bankAccount);
 
             return;
         }
@@ -99,20 +94,13 @@ public class BankFacadeImpl extends BankFacade {
 
     @Override
     public void addInterest() {
-        for (BankAccount bankAccount : bankAccountDatabase.getAll()) {
+        for (BankAccount bankAccount : this.getDatabase().getAll()) {
             bankAccount.addInterest();
-            bankAccountDatabase.update(bankAccount.getAccNumber(), bankAccount);
+            this.getDatabase().update(bankAccount.getAccNumber(), bankAccount);
         }
     }
 
     public Collection<BankAccount> getAccounts() {
-        return this.bankAccountDatabase.getAll();
-    }
-
-    @Override
-    public void alert(Event event, Object obj) {
-        for (Observer o : this.getObserverList()) {
-            o.callback(event, obj);
-        }
+        return this.getDatabase().getAll();
     }
 }

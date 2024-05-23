@@ -1,13 +1,13 @@
-package app.banking.facade_future;
+package app.framework.facade;
 import app.framework.domain.Account;
-import app.framework.facade.CommonFacadeImpl;
 import app.framework.persistence.Database;
-import app.banking.rules.BankRuleEngine;
+import app.framework.rules.BankRuleEngine;
+import app.framework.rules.RuleEngine;
 
 
 public class BankFacadeImpl extends CommonFacadeImpl<Account,String> implements BankFacade<Account,Double,String> {
 
-    BankRuleEngine ruleEngine;
+    RuleEngine<Account,Double> ruleEngine;
 
     public BankFacadeImpl(Database<Account,String> database, BankRuleEngine ruleEngine) {
         super(database);

@@ -10,21 +10,29 @@ import app.framework.domain.*;
 import app.framework.persistence.Database;
 import app.framework.rules.RuleEngine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I> extends CommonFacadeImpl<R,I> implements CommonBankFacade<R, T, I>, Observable {
 
-    RuleEngine ruleEngine;
+    RuleEngine<R,T> ruleEngine;
 
     List<Observer> observers;
 
-    public CommonBankFacadeImpl(Database<R, I> database, RuleEngine ruleEngine, List<Observer> observers) {
+    public CommonBankFacadeImpl(Database<R, I> database, RuleEngine<R,T> ruleEngine, List<Observer> observers) {
         super(database);
         this.ruleEngine = ruleEngine;
-        this.observers = observers;
-        observers.stream().forEach(e -> e.subscribe(this));
+        this.observers = observers == null ? new ArrayList<>() : observers;
+        this.observers.stream().forEach(e -> e.subscribe(this));
     }
 
+    public RuleEngine<R, T> getRuleEngine() {
+        return this.ruleEngine;
+    }
+
+    public List<Observer> getObservers() {
+        return this.observers;
+    }
 
     @Override
     public void deposit(R r, T t) {
@@ -60,16 +68,16 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
 
     @Override
     public void register(Observer ob) {
-        ob.subscribe(this);
+        this.observers.add(ob);
     }
 
     @Override
     public void unregister(Observer ob) {
-        ob.unsubscribe(this);
+        this.observers.remove(ob);
     }
 
     @Override
     public void alert(Event event, Object ob) {
-        observers.forEach(e -> e.callback(event, ob));
+        this.observers.forEach(e -> e.callback(event, ob));
     }
 }

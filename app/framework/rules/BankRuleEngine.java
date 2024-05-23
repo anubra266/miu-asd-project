@@ -1,8 +1,6 @@
-package app.banking.rules;
+package app.framework.rules;
 
 import app.framework.domain.Account;
-import app.framework.rules.Rule;
-import app.framework.rules.RuleEngine;
 
 import java.util.ArrayList;
 

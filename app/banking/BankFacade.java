@@ -2,16 +2,23 @@ package app.banking;
 
 import app.banking.customer.Personal;
 import app.banking.customer.Company;
-import app.framework.domain.AccountType;
-import app.framework.domain.Address;
-import app.framework.domain.Customer;
-import app.framework.domain.Subject;
+import app.banking.domain.BankAccount;
+import app.banking.domain.BankEntry;
+import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
+import app.framework.facade.CommonBankFacadeImpl;
+import app.framework.persistence.Database;
+import app.framework.rules.RuleEngine;
 
 import java.time.LocalDate;
+import java.util.List;
 
-abstract class BankFacade extends Subject {
+abstract class BankFacade extends CommonBankFacadeImpl<BankAccount, BankEntry,String> {
+
+    public BankFacade(Database<BankAccount,String> database, RuleEngine<BankAccount,BankEntry> ruleEngine, List<Observer> list) {
+        super(database, ruleEngine, list);
+    }
 
     public void createAccount(String accNr, String name, String street, String city, String state, String zip,
                               String email, AccountType accountType, LocalDate birthDate) throws AccountCreationException {
@@ -35,5 +42,4 @@ abstract class BankFacade extends Subject {
 
     abstract void deposit(String accNumber, double amount) throws AccountNotFoundException;
 
-    abstract void addInterest();
 }

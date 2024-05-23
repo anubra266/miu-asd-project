@@ -1,5 +1,7 @@
 package app.creditcard;
 
+import app.banking.domain.BankAccount;
+import app.banking.domain.BankEntry;
 import app.creditcard.observers.CreditCardEmailSender;
 import app.creditcard.strategies.*;
 import app.framework.domain.*;
@@ -8,21 +10,21 @@ import app.creditcard.strategies.BronzeMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.GoldMonthlyInterestPercentageStrategy;
 import app.creditcard.strategies.SilverMinimumPaymentPercentageStrategy;
 import app.framework.exceptions.CreditInvalidDepositException;
+import app.framework.facade.CommonBankFacadeImpl;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
+public class CreditCardFacadeImpl extends CommonBankFacadeImpl<CreditAccount, CreditCardEntry,String> implements CreditCardFacade {
 
     private static CreditCardFacadeImpl instance = new CreditCardFacadeImpl();
-    private CreditAccountDAO creditCardDatabase;
     PercentageStrategy percentageStrategy;
     PercentageStrategy minimumPaymentStrategy;
 
     private CreditCardFacadeImpl() {
-        this.creditCardDatabase = CreditAccountDAO.getInstance();
-        CreditCardEmailSender.getInstance().subscribe(this);
+        super(CreditAccountDAO.getInstance(),null, List.of(CreditCardEmailSender.getInstance()));
     };
 
     public static CreditCardFacadeImpl getInstance() {
@@ -33,7 +35,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
     public void createAccount(String name, String street, String city, String state, String zip, String email,
             String ccNumber, LocalDate exprDate, CreditCardType type) throws AccountCreationException {
 
-        if (creditCardDatabase.isUnique(ccNumber)) {
+        if (this.getDatabase().isUnique(ccNumber)) {
             Address address = new Address(street, city, state, zip);
             Customer customer = new Customer(name, email, address);
             CreditAccount account = new CreditAccount(ccNumber, customer, exprDate);
@@ -58,7 +60,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
             account.setPercentageStrategy(percentageStrategy);
             account.setMinimumPaymentStrategy(minimumPaymentStrategy);
 
-            this.creditCardDatabase.save(ccNumber, account);
+            this.getDatabase().save(ccNumber, account);
         }else{
             throw new AccountCreationException("Credit Card  with number " + ccNumber + " already exists");
         }
@@ -68,7 +70,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     @Override
     public Collection<String> generateMonthlyBill() {
-        Collection<CreditAccount> accounts = creditCardDatabase.getAll();
+        Collection<CreditAccount> accounts = this.getDatabase().getAll();
         return accounts.stream().map(acc -> {
             double previousBalance = acc.getBalance() - acc.calculateCurrentMonthEntriesBalance();
             double totalCharges = acc.calculateCurrentMonthEntriesTotalDebits();
@@ -87,33 +89,26 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
 
     @Override
     public void chargeAmount(String ccNumber, double amount) {
-        CreditAccount account = this.creditCardDatabase.get(ccNumber);
+        CreditAccount account = this.getDatabase().get(ccNumber);
         if(amount > 400){
             this.alert(Event.CHARGE, account);
         }
         account.withdraw(amount, "charge");
-        this.creditCardDatabase.save(ccNumber, account);
+        this.getDatabase().save(ccNumber, account);
     }
 
     @Override
     public void deposit(String ccNumber, double amount) throws CreditInvalidDepositException {
-        CreditAccount account = this.creditCardDatabase.get(ccNumber);
+        CreditAccount account = this.getDatabase().get(ccNumber);
         if (account.getBalance() >= 0 || account.getBalance() + amount > 0) {
             throw new CreditInvalidDepositException("Cannot deposit more than you owe");
         }
         account.deposit(amount, "deposit");
-        this.creditCardDatabase.save(ccNumber, account);
+        this.getDatabase().save(ccNumber, account);
     }
 
     public Collection<CreditAccount> getAccounts() {
-        return this.creditCardDatabase.getAll();
-    }
-
-    @Override
-    public void alert(Event event, Object obj) {
-        for (Observer o : this.getObserverList()) {
-            o.callback(event, obj);
-        }
+        return this.getDatabase().getAll();
     }
 
 }
