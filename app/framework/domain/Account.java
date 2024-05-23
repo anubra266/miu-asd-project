@@ -1,12 +1,16 @@
 package app.framework.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.stream.Collectors;
 
-public abstract class Account {
+public abstract class Account implements Serializable {
+
+    private static final long serialVersionUID = -891229800414574888L;
+
     private final String accNumber;
     private final Customer customer;
     private PercentageStrategy percentageStrategy;
@@ -76,21 +80,21 @@ public abstract class Account {
 
     public void addInterest() {
         double interest = this.percentageStrategy.getPercentAmount(getBalance());
-        Entry entry = this.getEntry(interest, "interest");
+        Entry entry = this.getEntry(interest, "interest", Event.DEPOSIT);
         this.addEntry(entry);
     }
 
     public void deposit(double amount, String description) {
-        Entry entry = this.getEntry(amount, description);
+        Entry entry = this.getEntry(amount, description, Event.DEPOSIT);
         this.addEntry(entry);
     };
 
     public void withdraw(double amount, String description) {
-        Entry entry = this.getEntry(-amount, description);
+        Entry entry = this.getEntry(-amount, description,Event.WITHDRAW);
         this.addEntry(entry);
     };
 
-    public abstract Entry getEntry(double amount, String description);
+    public abstract Entry getEntry(double amount, String description,Event event);
 
     public List<Entry> getEntryList() {
         return this.entryList;

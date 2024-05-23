@@ -6,6 +6,10 @@ public class GoldMonthlyInterestPercentageStrategy implements PercentageStrategy
 
     private double percent = .06;
 
+    public GoldMonthlyInterestPercentageStrategy() {
+
+    }
+
     public double getPercent() {
         return percent;
     }

@@ -1,8 +1,11 @@
 package app.ui.ccard;
 
-import java.awt.BorderLayout;
+import app.creditcard.CreditAccount;
+import app.creditcard.CreditCardFacadeImpl;
 
-import javax.swing.JOptionPane;
+import java.awt.BorderLayout;
+import java.util.Collection;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -16,15 +19,17 @@ public class CardFrm extends javax.swing.JFrame {
 	 * init variables in the object
 	 ****/
 	String clientName, street, city, zip, state, accountType, amountDeposit, expdate, ccnumber;
-	boolean newaccount;
 	private DefaultTableModel model;
 	private JTable JTable1;
 	private JScrollPane JScrollPane1;
 	CardFrm thisframe;
 	private Object rowdata[];
 
+	CreditCardFacadeImpl creditService;
+
 	public CardFrm() {
 		thisframe = this;
+		this.creditService = CreditCardFacadeImpl.getInstance();
 
 		setTitle("Credit-card processing Application.");
 		setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
@@ -42,19 +47,21 @@ public class CardFrm extends javax.swing.JFrame {
 		JScrollPane1 = new JScrollPane();
 		model = new DefaultTableModel();
 		JTable1 = new JTable(model);
+
 		model.addColumn("Name");
 		model.addColumn("CC number");
 		model.addColumn("Exp date");
 		model.addColumn("Type");
 		model.addColumn("Balance");
 		rowdata = new Object[7];
-		newaccount = false;
+
+		this.populateTable();
 
 		JPanel1.add(JScrollPane1);
+
 		JScrollPane1.setBounds(12, 92, 444, 160);
 		JScrollPane1.getViewport().add(JTable1);
 		JTable1.setBounds(0, 0, 420, 0);
-		// rowdata = new Object[8];
 
 		JButton_NewCCAccount.setText("Add Credit-card account");
 		JPanel1.add(JButton_NewCCAccount);
@@ -181,17 +188,7 @@ public class CardFrm extends javax.swing.JFrame {
 		ccac.setBounds(450, 20, 300, 380);
 		ccac.show();
 
-		if (newaccount) {
-			// add row to table
-			rowdata[0] = clientName;
-			rowdata[1] = ccnumber;
-			rowdata[2] = expdate;
-			rowdata[3] = accountType;
-			rowdata[4] = "0";
-			model.addRow(rowdata);
-			JTable1.getSelectionModel().setAnchorSelectionIndex(-1);
-			newaccount = false;
-		}
+		this.repaintTable();
 
 	}
 
@@ -206,7 +203,7 @@ public class CardFrm extends javax.swing.JFrame {
 		// get selected name
 		int selection = JTable1.getSelectionModel().getMinSelectionIndex();
 		if (selection >= 0) {
-			String name = (String) model.getValueAt(selection, 0);
+			String name = (String) model.getValueAt(selection, 1);
 
 			// Show the dialog for adding deposit amount for the current mane
 			JDialog_Deposit dep = new JDialog_Deposit(thisframe, name);
@@ -214,11 +211,7 @@ public class CardFrm extends javax.swing.JFrame {
 			dep.show();
 
 			// compute new amount
-			long deposit = Long.parseLong(amountDeposit);
-			String samount = (String) model.getValueAt(selection, 4);
-			long currentamount = Long.parseLong(samount);
-			long newamount = currentamount + deposit;
-			model.setValueAt(String.valueOf(newamount), selection, 4);
+			this.repaintTable();
 		}
 
 	}
@@ -227,26 +220,46 @@ public class CardFrm extends javax.swing.JFrame {
 		// get selected name
 		int selection = JTable1.getSelectionModel().getMinSelectionIndex();
 		if (selection >= 0) {
-			String name = (String) model.getValueAt(selection, 0);
+			String name = (String) model.getValueAt(selection, 1);
 
 			// Show the dialog for adding withdraw amount for the current mane
 			JDialog_Withdraw wd = new JDialog_Withdraw(thisframe, name);
 			wd.setBounds(430, 15, 275, 140);
 			wd.show();
 
-			// compute new amount
-			long deposit = Long.parseLong(amountDeposit);
-			String samount = (String) model.getValueAt(selection, 4);
-			long currentamount = Long.parseLong(samount);
-			long newamount = currentamount - deposit;
-			model.setValueAt(String.valueOf(newamount), selection, 4);
-			if (newamount < 0) {
-				JOptionPane.showMessageDialog(JButton_Withdraw,
-						" " + name + " Your balance is negative: $" + String.valueOf(newamount) + " !",
-						"Warning: negative balance", JOptionPane.WARNING_MESSAGE);
-			}
+			this.repaintTable();
 		}
 
+	}
+
+	private void repaintTable() {
+		model = new DefaultTableModel();
+		JTable1 = new JTable(model);
+
+		JScrollPane1.getViewport().add(JTable1);
+		JTable1.setBounds(0, 0, 420, 0);
+
+		model.addColumn("Name");
+		model.addColumn("CC number");
+		model.addColumn("Exp date");
+		model.addColumn("Type");
+		model.addColumn("Balance");
+		rowdata = new Object[7];
+
+		this.populateTable();
+	}
+
+	private void populateTable() {
+		Collection<CreditAccount> accounts = this.creditService.getAccounts();
+
+		for (CreditAccount account : accounts) {
+			rowdata[0] = account.getCustomer().getName();
+			rowdata[1] = account.getAccNumber();
+			rowdata[2] = account.getExprDate();
+			rowdata[3] = account.getPercentageStrategy().getName();
+			rowdata[4] = account.getBalance();
+			model.addRow(rowdata);
+		}
 	}
 
 }

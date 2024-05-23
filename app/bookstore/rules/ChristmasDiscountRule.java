@@ -23,7 +23,7 @@ public class ChristmasDiscountRule implements DiscountRule {
     @Override
     public void apply(BookStoreAccount bookStoreAccount, PurchaseEntry purchaseEntry) {
         // TODO: apply some discount on entry amount
-        PurchaseEntry discountedEntry = new PurchaseEntry(purchaseEntry.getAmount() - purchaseEntry.getAmount() * .1 , purchaseEntry.getDate(), purchaseEntry.getDescription()+ "Note: 10% off from during Christmas");
+        PurchaseEntry discountedEntry = new PurchaseEntry(purchaseEntry.getAmount() - purchaseEntry.getAmount() * .1 , purchaseEntry.getDate(), purchaseEntry.getDescription()+ "Note: 10% off from during Christmas", purchaseEntry.getEvent());
         bookStoreAccount.getEntryList().add(discountedEntry);
 
     }

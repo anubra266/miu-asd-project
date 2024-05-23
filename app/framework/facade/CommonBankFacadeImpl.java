@@ -10,28 +10,38 @@ import app.framework.domain.*;
 import app.framework.persistence.DAO;
 import app.framework.rules.RuleEngine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I> extends CommonFacadeImpl<R,I> implements CommonBankFacade<R, T, I>, Observable {
 
-    RuleEngine ruleEngine;
-    List<Observer> observers;
+    RuleEngine<R,T> ruleEngine;
 
-    public CommonBankFacadeImpl(DAO<R, I> database, RuleEngine ruleEngine, List<Observer> observers) {
+    List<Observer> observers = new ArrayList<>();
+
+    public CommonBankFacadeImpl(DAO<R, I> database, RuleEngine<R,T> ruleEngine, List<Observer> observers) {
         super(database);
         this.ruleEngine = ruleEngine;
-        this.observers = observers;
-        observers.stream().forEach(e -> e.subscribe(this));
+        if(observers != null){
+            observers.stream().forEach(e -> e.subscribe(this));
+        }
+
     }
 
+    public RuleEngine<R, T> getRuleEngine() {
+        return this.ruleEngine;
+    }
+
+    public List<Observer> getObservers() {
+        return this.observers;
+    }
 
     @Override
     public void deposit(R r, T t) {
         try {
             this.ruleEngine.process(r, t);
             r.deposit(t.getAmount(), t.getDescription());
-            database.update((I) r.getAccNumber(), r);
-            alert(Event.DEPOSIT, r);
+            this.getDatabase().update((I) r.getAccNumber(), r);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,35 +52,34 @@ public abstract class CommonBankFacadeImpl<R extends Account, T extends Entry, I
         try {
             this.ruleEngine.process(r, t);
             r.withdraw(t.getAmount(), t.getDescription());
-            database.update((I) r.getAccNumber(), r);
-            alert(Event.WITHDRAW, r);
+            this.getDatabase().update((I) r.getAccNumber(), r);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public R update(I id, R r) {
-        database.update((I) r.getAccNumber(), r);
+        this.getDatabase().update((I) r.getAccNumber(), r);
         return r;
     }
 
     @Override
     public void addInterest() {
-        database.getAll().forEach(Account::addInterest);
+        this.getDatabase().getAll().forEach(Account::addInterest);
     }
 
     @Override
     public void register(Observer ob) {
-        ob.subscribe(this);
+        this.observers.add(ob);
     }
 
     @Override
     public void unregister(Observer ob) {
-        ob.unsubscribe(this);
+        this.observers.remove(ob);
     }
 
     @Override
     public void alert(Event event, Object ob) {
-        observers.forEach(e -> e.callback(event, ob));
+        this.observers.forEach(e -> e.callback(event, ob));
     }
 }

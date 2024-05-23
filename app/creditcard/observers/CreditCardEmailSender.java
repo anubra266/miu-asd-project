@@ -1,5 +1,6 @@
 package app.creditcard.observers;
 
+import app.creditcard.CreditAccount;
 import app.framework.domain.Event;
 import app.framework.domain.Observable;
 import app.framework.domain.Observer;
@@ -24,6 +25,7 @@ public class CreditCardEmailSender implements Observer {
     }
 
     public void callback(Event event, Object ob){
-        System.out.println("Credit Card Account Transaction");
+        CreditAccount acc = (CreditAccount) ob;
+        System.out.println("[EMAIL]: Event: "+ event +",Account: "+ acc.getCustomer().getCustomerType()  + ", Email: " + acc.getCustomer().getEmail());
     };
 }

@@ -26,6 +26,6 @@ public class CheckingPercentageStrategy implements PercentageStrategy {
     }
 
     public String getName() {
-        return "CHECKINGS";
+        return "CHECKING";
     }
 }

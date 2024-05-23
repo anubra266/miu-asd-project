@@ -6,36 +6,33 @@
 
 package app.framework.rules;
 
-import app.framework.domain.Account;
-import app.framework.domain.Entry;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuleEngine {
-    private List<Rule> rules = new ArrayList<>();
+public class RuleEngine<T,I> {
+    private List<Rule<T,I>> rules = new ArrayList<>();
 
-    public void addRule(Rule rule) {
+    public void addRule(Rule<T,I> rule) {
         this.rules.add(rule);
     }
 
-    public void removeRule(Rule rule) {
+    public void removeRule(Rule<T,I> rule) {
         this.rules.remove(rule);
     }
 
-    public List<Rule> getRules() {
+    public List<Rule<T,I>> getRules() {
         return this.rules;
     }
 
-    public void setRules(List<Rule> rules) {
+    public void setRules(List<Rule<T,I>> rules) {
         this.rules = rules;
     }
 
-    public void process(Account account, Entry entry) {
+    public void process(T arg1, I arg2) {
         System.out.println("==== Applying rules ====");
         rules.stream()
-                .filter(r -> r.matches(account, entry))
-                .forEach(r -> r.apply(account, entry));
+                .filter(r -> r.matches(arg1, arg2))
+                .forEach(r -> r.apply(arg1, arg2));
         System.out.println("==== Applied rules ====");
     }
 

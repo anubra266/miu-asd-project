@@ -9,9 +9,7 @@ package app.framework.facade;
 import app.framework.persistence.DAO;
 import app.framework.persistence.Database;
 
-import javax.xml.crypto.Data;
 import java.util.Collection;
-import java.util.List;
 
 public abstract class CommonFacadeImpl<R, I> implements CommonFacade<R, I> {
 
@@ -21,15 +19,19 @@ public abstract class CommonFacadeImpl<R, I> implements CommonFacade<R, I> {
         this.database = database;
     }
 
+    public Database<R, I> getDatabase() {
+        return this.database;
+    }
+
     @Override
     public R create(I i, R r) {
-        database.save(i,r);
+        database.save(i, r);
         return r;
     }
 
     @Override
     public R update(I i, R r) {
-        database.update(i,r);
+        database.update(i, r);
         return r;
     }
 
