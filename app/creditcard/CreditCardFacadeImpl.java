@@ -77,8 +77,7 @@ public class CreditCardFacadeImpl extends Subject implements CreditCardFacade {
             double minimumPayment = acc.getMinimumPaymentStrategy().getPercentAmount(newBalance);
 
             return String.format(
-                    "Name= %s\nAddress= %s\nCC number= %s\nCC type= %s\nPrevious balance = $ %.2f\nTotal Credits = $ %.2f\nTotal Charges = $ %.2f\nNew balance = $ %.2f\nTotal amount due = $ %.2f\n",
-                    acc.getCustomer().getName(), acc.getCustomer().getAddress().toString(), acc.getAccNumber(),
+                    "Name= %s\nAddress= %s\nCC number= %s\nCC type= %s\nPrevious balance = $ %.2f\nTotal Credits = $ %.2f\nTotal Charges = $ %.2f\nNew balance = $ %.2f\nTotal amount due = $ %.2f\n",acc.getCustomer().getName(), acc.getCustomer().getAddress().getAddress(), acc.getAccNumber(),
                     acc.getPercentageStrategy().getName(), previousBalance, totalCredits, totalCharges, newBalance,
                     minimumPayment);
         }).collect(Collectors.toList());
