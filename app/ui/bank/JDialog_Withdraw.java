@@ -91,8 +91,6 @@ public class JDialog_Withdraw extends javax.swing.JDialog {
 			double amount = Double.parseDouble(amountStr);
 			this.bankService.withDraw(accNumber, amount);
 			dispose();
-		} catch (AccountNotFoundException ex) {
-			JOptionPane.showMessageDialog(this, ex.getMessage());
 		} catch (NumberFormatException e) {
 			// Handle the case when the input is not a valid number
 			JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Invalid Input",

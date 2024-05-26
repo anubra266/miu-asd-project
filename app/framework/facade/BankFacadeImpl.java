@@ -10,7 +10,7 @@ public class BankFacadeImpl extends CommonFacadeImpl<Account,String> implements 
 
     RuleEngine<Account,Double> ruleEngine;
 
-    public BankFacadeImpl(DAO<Account,String> database, BankRuleEngine ruleEngine) {
+    public BankFacadeImpl(DAO<Account,String> database, RuleEngine<Account,Double> ruleEngine) {
         super(database);
         this.ruleEngine = ruleEngine;
     }

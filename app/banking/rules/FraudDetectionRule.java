@@ -6,41 +6,46 @@
 
 package app.banking.rules;
 
-import app.framework.domain.Account;
-import app.framework.domain.Entry;
-import app.framework.domain.Event;
-import app.framework.domain.Observable;
+import app.banking.domain.BankAccount;
 import app.framework.exceptions.FraudTransactionException;
+import app.framework.domain.*;
+import app.framework.rules.BankTransactionRule;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class FraudDetectionRule implements TransactionRule {
+public class FraudDetectionRule extends Subject implements BankTransactionRule {
 
-    Observable observable;
-
-    public FraudDetectionRule(Observable observable){
-        this.observable  = observable;
+    public FraudDetectionRule(List<Observer> observerList){
+        if(observerList != null){
+            observerList.stream().forEach(o -> o.subscribe(this));
+        }
     }
 
     @Override
-    public boolean matches(Account account, Entry entry) {
+    public boolean matches(BankAccount account, Double amount, String desc, Event event) {
         List<Entry> list = account.getEntryList();
         long count = list.stream()
                 .filter(e -> {
                     LocalDateTime localDateTime = LocalDateTime.now();
-                    LocalDateTime entryDate = entry.getDate();
+                    LocalDateTime entryDate = e.getDate();
                     Duration d = Duration.between(localDateTime, entryDate);
-                    return d.toMinutes() <= 5 && entry.getAmount() == e.getAmount() && entry.getDescription().equals(e.getDescription());
+                    return d.toMinutes() <= 5 && amount == e.getAmount();
                 }).count();
-        ;
         return count >= 3;
     }
 
     @Override
-    public void apply(Account account, Entry entry) {
-        observable.alert(Event.FRAUD_TRANSACTION_ALERT, account);
+    public void apply(BankAccount acc, Double amount, String desc, Event event) {
+        this.alert(Event.FRAUD_TRANSACTION_ALERT, acc);
         throw new FraudTransactionException("Possible fraud transaction");
+    }
+
+    @Override
+    public void alert(Event event, Object ob) {
+        for(Observer obs: this.getObserverList()){
+            obs.callback( event,  ob);
+        }
     }
 }
