@@ -1,16 +1,14 @@
 package app.banking;
 
 import app.banking.domain.BankAccount;
-import app.banking.observers.BankEmailSender;
 import app.banking.persistence.BankAccountDAO;
 import app.banking.strategies.CheckingPercentageStrategy;
 import app.banking.strategies.SavingPercentageStrategy;
 import app.framework.domain.*;
 import app.framework.exceptions.AccountCreationException;
 import app.framework.exceptions.AccountNotFoundException;
-import app.framework.exceptions.InsufficientBalanceException;
+import app.framework.rules.BankRuleEngine;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -23,12 +21,7 @@ public class BankFacadeImpl extends BankFacade {
     }
 
     private BankFacadeImpl() {
-
-        super(BankAccountDAO.getInstance(),null, new ArrayList<Observer>(){
-            {
-                add(BankEmailSender.getInstance());
-            }
-        });
+        super(BankAccountDAO.getInstance(), BankHelper.getRuleEngine(), BankHelper.getObservers());
     }
 
     public void createAccount(Customer customer, String accNr, AccountType accountType)
@@ -56,21 +49,24 @@ public class BankFacadeImpl extends BankFacade {
         BankAccount bankAccount = getDatabase().get(accNumber);
 
         if (bankAccount != null) {
-            if(bankAccount.getBalance() < amount){
-                this.alert(Event.INSUFFICIENT_FUND,bankAccount);
-            }
-            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
-                this.alert(Event.WITHDRAW,bankAccount);
-            }else{
-                if(amount > 500){
-                    this.alert(Event.WITHDRAW,bankAccount);
-                }
-            }
+            BankRuleEngine ruleEngine = (BankRuleEngine) this.getRuleEngine();
+            ruleEngine.setRules(BankHelper.getWithdrawRules());
+            ruleEngine.process(bankAccount,amount,"Amount withdraw", Event.WITHDRAW);
+//            if(bankAccount.getBalance() < amount){
+//                this.alert(Event.INSUFFICIENT_FUND,bankAccount);
+//            }
+//            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
+//                this.alert(Event.WITHDRAW,bankAccount);
+//            }else{
+//                if(amount > 500){
+//                    this.alert(Event.WITHDRAW,bankAccount);
+//                }
+//            }
 
-            if (bankAccount.getBalance() < amount) {
-                throw new InsufficientBalanceException(
-                        "Account with number " + accNumber + " does not have enough balance");
-            }
+//            if (bankAccount.getBalance() < amount) {
+//                throw new InsufficientBalanceException(
+//                        "Account with number " + accNumber + " does not have enough balance");
+//            }
             bankAccount.withdraw(amount, "Amount withdraw");
             getDatabase().update(bankAccount.getAccNumber(), bankAccount);
             return;
@@ -82,13 +78,17 @@ public class BankFacadeImpl extends BankFacade {
     public void deposit(String accNumber, double amount) throws AccountNotFoundException {
         BankAccount bankAccount = getDatabase().get(accNumber);
         if (bankAccount != null) {
-            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
-                this.alert(Event.DEPOSIT,bankAccount);
-            }else{
-                if(amount > 500){
-                    this.alert(Event.DEPOSIT,bankAccount);
-                }
-            }
+            BankRuleEngine ruleEngine = (BankRuleEngine) this.getRuleEngine();
+            ruleEngine.setRules(BankHelper.getDepositRules());
+            ruleEngine.process(bankAccount,amount,"Amount deposit", Event.DEPOSIT);
+
+//            if(bankAccount.getCustomer().getCustomerType().equals("Company")){
+//                this.alert(Event.DEPOSIT,bankAccount);
+//            }else{
+//                if(amount > 500){
+//                    this.alert(Event.DEPOSIT,bankAccount);
+//                }
+//            }
 
             bankAccount.deposit(amount, "Amount deposit");
             getDatabase().update(bankAccount.getAccNumber(), bankAccount);

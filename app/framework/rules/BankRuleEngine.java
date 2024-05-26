@@ -1,30 +1,18 @@
 package app.framework.rules;
 
-import app.framework.domain.Account;
+import app.banking.domain.BankAccount;
+import app.banking.domain.BankEntry;
+import app.framework.domain.Event;
 
-import java.util.ArrayList;
+public class BankRuleEngine extends RuleEngine<BankAccount, BankEntry> {
 
-
-public class BankRuleEngine extends RuleEngine<Account,Double> {
-
-        public void addRule(Rule<Account,Double> rule) {
-            this.getRules().add(rule);
-        }
-
-        public void removeRule(Rule<Account,Double> rule) {
-            this.getRules().remove(rule);
-        }
-
-        public void resetRules(){
-            this.setRules(new ArrayList<>());
-        }
-
-        public void process(Account acc, Double amount) {
-            System.out.println("==== Applying rules ====");
-            this.getRules().stream()
-                    .filter(r -> r.matches(acc, amount))
-                    .forEach(r -> r.apply(acc, amount));
-            System.out.println("==== Applied rules ====");
-        }
-
+    public void process(BankAccount acc, Double amount, String description, Event event){
+        System.out.println("==== Applying rules ====");
+        this.getRules().stream()
+                .filter(r -> ((BankTransactionRule) r).matches(acc, amount,description,event))
+                .forEach(r -> ((BankTransactionRule) r).apply(acc, amount,description,event));
+        System.out.println("==== Applied rules ====");
+    }
+    
 }
+

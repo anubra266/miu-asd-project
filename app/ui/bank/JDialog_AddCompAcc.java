@@ -187,17 +187,18 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
 		// Extract the number of employees if provided
 		String numOfEmpStr = JTextField_NoOfEmp.getText();
 		int numberOfEmployees = 0;
-		if (!numOfEmpStr.isEmpty()) {
-			numberOfEmployees = Integer.parseInt(numOfEmpStr);
-		}
+
 
 		try {
+			if (!numOfEmpStr.isEmpty()) {
+				numberOfEmployees = Integer.parseInt(numOfEmpStr);
+			}
 			var accType = JRadioButton_Chk.isSelected() ? AccountType.CHECKING : AccountType.SAVING;
 			this.bankService.createAccount(accNr, name, street, city, state, zip, email, accType, numberOfEmployees);
 			// parentframe.accountType = "Company";
 			JOptionPane.showMessageDialog(this, "Company" + accType + " Account created Successfully!!!");
 			dispose();
-		} catch (AccountCreationException ex) {
+		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage());
 		}
 
